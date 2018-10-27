@@ -1,0 +1,114 @@
+{extend name="base"/}
+<!--上级栏目-->
+{block name="slider_bar"}system-setting{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_config')}</li>
+<li>{:lang('c_config_shop')}</li>
+{/block}
+
+
+{block name="content"}
+<div class="col-xs-12">
+    <!-- PAGE CONTENT BEGINS -->
+    <div class="tabbable">
+        <ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+            {volist name="list" id="vo"}
+            <li class="{:$key?'':'active'}">
+                <a data-toggle="tab" href="#{$vo['code']}">
+                    {:c_lang($sys_master,$vo['code'])}
+                </a>
+            </li>
+            {/volist}
+
+        </ul>
+
+        <div class="tab-content no-border padding-24">
+            {volist name="list" id="vo"}
+            <div id="{$vo['code']}" class="tab-pane fade {:$key?'':' in active'}">
+                <form class="form-horizontal" action="{:url('settingAction')}">
+
+                    <h4 class="blue">
+                        <a class="btn btn-white btn-info btn-bold submit">{:c_lang('g_save')}</a>
+                    </h4>
+
+                    <div class="space-8"></div>
+
+                    <div class="row col-sm-6 col-sm-offset-2">
+                            {volist name="vo['link_data']" id="ch"}
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,$ch['code'])} </label>
+                                    <div class="col-sm-9">
+                                        <!--传递信息-->
+                                        {php} $info_key = 'key['.$ch['id'].']'; {/php}
+                                        {if ($ch['type']=='text') }
+                                            <input type="text" placeholder="{:c_lang($sys_master,$ch['code'])}" name="{$info_key}" value="{$ch['value']}" class="form-control" maxlength="50">
+                                        {elseif ($ch['type'] == 'number') /}
+                                            <input type="number" placeholder="0" name="{$info_key}" value="{$ch['value']}" class="form-control">
+                                        {elseif ($ch['type'] == 'textarea') /}
+                                            <textarea  name="{$info_key}" class="form-control limited" placeholder="{:c_lang($sys_master,$ch['code'])}">{$ch['value']}</textarea>
+                                        {elseif ($ch['type'] == 'radio') /}
+                                            <div class="space-4"></div>
+                                            {volist name="ch['store_range']" id="ra"}
+                                                <label>
+                                                    <input type="radio" name="{$info_key}" value="{$ra}" class="ace" {$ch['value']===$ra?'checked':''}>
+                                                    <span class="lbl"> {:c_lang($ch['code'].'_'.$ra)}</span>
+                                                </label>
+                                            {/volist}
+                                        {elseif ($ch['type']=='file')/}
+                                            <input type="hidden" name="{$info_key}" value="{$ch['value']}"/>
+                                            <button type="button" class="layui-btn alone-upload"  lay-data='{:json_encode($ch["store_range"])}'   >
+                                                <i class="layui-icon">&#xe67c;</i>上传文件
+                                            </button>
+                                            <img src="{:get_image_location($ch['value'])}" width="80px" height="30px"/>
+                                        {elseif ($ch['type']=='select')/}
+                                            <select class="form-control" name="{$info_key}">
+                                                {volist name="ch['store_range']" id="st"}
+                                                    <option value="{$key}" {:$ch['value']==$key?'selected':''}>{$st}</option>
+                                                {/volist}
+                                            </select>
+                                        {/if}
+
+                                        {if (c_lang_check($sys_master,$ch['code'].'_notice'))}
+                                            <span class="help-block">{:c_lang($sys_master,$ch['code'].'_notice')}</span>
+                                        {/if}
+
+                                    </div>
+                                </div>
+                            {/volist}
+                    </div>
+                </form>
+
+            </div>
+            {/volist}
+        </div>
+    </div>
+
+    <!-- PAGE CONTENT ENDS -->
+</div><!-- /.col -->
+
+{/block}
+
+{block name="script"}
+<script src="/static/layui-v2.4.3/define_upload.js"></script>
+<script>
+    layui.use('upload',function(){
+        var upload = layui.upload; //得到 upload 对象
+        console.log(upload);
+        $.fn.upload_obj.done = function(res){
+            console.log(res)
+        }
+        $.fn.upload_obj.upload(upload,'.alone-upload')
+
+    });
+    $(function(){
+        $(".submit").click(function(){
+            var $this = $(this);
+            $.post($this.parents('form').attr('action'),$this.parents('form').serialize(),function(result){
+                layer.msg(result.msg)
+            })
+        })
+    })
+</script>
+{/block}

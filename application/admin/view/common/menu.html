@@ -1,0 +1,53 @@
+
+<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+    <script type="text/javascript">
+        try{ace.settings.loadState('sidebar')}catch(e){}
+    </script>
+
+
+
+    <ul class="nav nav-list">
+
+        {volist name="list" id="vo"}
+            <li class="">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa {:$vo['icon']}"></i>
+                    <span class="menu-text"> {:c_lang($vo['module'],$vo['name'])}</span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+
+                <ul class="submenu">
+
+                    {volist name="vo['link_data']" id="ld"}
+                    <li class="" id="{:str_replace('/','-',strtolower($ld['url']))}">
+
+                        <a href="{:url($ld['url'])}">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            {:c_lang($ld['module'],$ld['name'])}
+                        </a>
+
+                    </li>
+                    {/volist}
+                </ul>
+            </li>
+        {/volist}
+
+    </ul><!-- /.nav-list -->
+
+    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+        <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+    <script>
+        $(function(){
+            var slider_bar = '{$slider_bar}';
+            slider_bar = slider_bar?slider_bar:'index';
+
+            $("#"+slider_bar).addClass('active');
+            $("#"+slider_bar).parents('li').addClass('active open');
+        })
+    </script>
+</div>
+
+
+
