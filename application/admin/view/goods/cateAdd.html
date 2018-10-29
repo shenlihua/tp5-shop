@@ -1,0 +1,95 @@
+{extend name="base"/}
+<!--上级栏目-->
+{block name="slider_bar"}goods-cate{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_goods')}</li>
+<li>{:lang('c_goods_cate')}</li>
+<li>{:lang('c_goods_cate_opt')}</li>
+{/block}
+
+
+{block name="content"}
+
+
+<!-- div.table-responsive -->
+
+<!-- div.dataTables_borderWrap -->
+
+<form class="form-horizontal col-sm-6 col-sm-offset-2" role="form" id="form" action="{:url('')}">
+    <input type="hidden" name="id" value="{$model['id']}" />
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,'p_f_goods_cate_pid')}{$model['pid']} </label>
+
+        <div class="col-sm-9">
+            <select name="pid" id="" class="form-control">
+                <option value="0">顶级分类</option>
+                {volist name="cate" id="vo"}
+                    <option value="{$vo['id']}" {:$vo['id']==$model['pid']?"selected":""}>{$vo['name']}</option>
+                    {volist name="vo['link_data']" id="ch"}
+                        <option value="{$ch['id']}" {:$ch['id']==$model['pid']?"selected":""}>&nbsp;&nbsp;{$ch['name']}</option>
+                    {/volist}
+                {/volist}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> {:lang('g_name')} </label>
+
+        <div class="col-sm-9">
+            <input type="text"  placeholder="{:lang('g_name')}" name="name" value="{$model['name']}" class="form-control" maxlength="20"/>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" > {:lang('g_status')} </label>
+
+        <div class="col-sm-9">
+            <label>
+                <input type="radio" name="status" value="1" class="ace" {$model['status']!=2?'checked':''}>
+                <span class="lbl"> {:lang('g_status_normal')}</span>
+            </label>
+            <label>
+                <input type="radio" name="status" value="2" class="ace" {$model['status']==2?'checked':''}>
+                <span class="lbl">  {:lang('g_status_close')}</span>
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" > {:lang('g_sort')} </label>
+
+        <div class="col-sm-9">
+            <input type="number" name="sort" value="{:$model['sort']?$model['sort']:100}"/>
+        </div>
+    </div>
+
+
+    <div class=" form-actions clearfix">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="button" id="submit" onclick="$.common.submit($(this).parents('form'))">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                {:lang('g_save')}
+            </button>
+
+        </div>
+    </div>
+
+</form>
+
+
+
+{/block}
+
+{block name="script"}
+<script>
+
+    $(function(){
+
+    })
+</script>
+{/block}

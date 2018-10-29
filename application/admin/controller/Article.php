@@ -11,7 +11,8 @@ class Article extends Platform
         $model = new \app\common\model\Article();
         $list = $model->with('linkCate')->order('release_time','desc')->paginate();
         return view('index',[
-            'list'  => $list
+            'list'  => $list,
+            'page'  => $list->render()
         ]);
     }
 
@@ -45,14 +46,12 @@ class Article extends Platform
     //分类--列表
     public function cate()
     {
-        $keyword = $this->request->param('keyword','','trim');
         $list = model('ArticleCate')
             ->with('linkData')
             ->where('pid','=','0')
             ->order('sort','asc')
             ->select();
         return view('cate',[
-            'keyword' => $keyword,
             'list' => $list,
         ]);
     }

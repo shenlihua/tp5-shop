@@ -42,16 +42,16 @@
                 <td rowspan="{:count($vo['link_data'])+1}">{:$vo['name']}</td>
                 <td>--</td>
                 <td>
-                    <a href="{:url('cateAdd',['id'=>$vo['id']])}">编辑</a>
-                    <a href="javascript:;" onclick="$.common.del(this,'{:url('cateDel')}',{'id':{:$vo['id']}})" data-id="{$vo['id']}">删除</a>
+                    <a href="{:url('cateAdd',['id'=>$vo['id']])}">{:lang('g_edit')}</a>
+                    <a href="javascript:;" onclick="$.common.del(this,'{:url('cateDel')}',{'id':{:$vo['id']}})" data-id="{$vo['id']}">{:lang('g_del')}</a>
                 </td>
             </tr>
             {volist name="vo['link_data']" id="ch"}
                 <tr>
                     <td>{:$ch['name']}</td>
                     <td>
-                        <a href="{:url('cateAdd',['id'=>$vo['id']])}">编辑</a>
-                        <a href="javascript:;" onclick="$.common.del(this,'{:url('cateDel')}',{'id':{:$ch['id']}})" data-id="{$vo['id']}">删除</a>
+                        <a href="{:url('cateAdd',['id'=>$vo['id']])}">{:lang('g_edit')}</a>
+                        <a href="javascript:;" onclick="$.common.del(this,'{:url('cateDel')}',{'id':{:$ch['id']}})" data-id="{$vo['id']}">{:lang('g_del')}</a>
                     </td>
                 </tr>
             {/volist}

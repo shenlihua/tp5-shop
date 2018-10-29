@@ -1,0 +1,83 @@
+{extend name="base"/}
+<!--上级栏目-->
+{block name="slider_bar"}goods-cate{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_goods')}</li>
+<li>{:lang('c_goods_cate')}</li>
+{/block}
+
+
+{block name="content"}
+
+
+<!-- div.table-responsive -->
+
+<!-- div.dataTables_borderWrap -->
+<div class="dataTables_wrapper form-inline no-footer">
+    <div class="row">
+        <div class="col-xs-6">
+            <a href="{:url('cateAdd')}" class="btn btn-sm btn-primary" type="button">{:c_lang($sys_master,'p_goods_cate_add')}</a>
+        </div>
+        <div class="col-xs-5 text-right">
+
+        </div>
+        <div class="col-xs-1">
+
+        </div>
+    </div>
+    <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_top_cate_name')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_one_cate_name')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_two_cate_name')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_cate_status')}</th>
+            <th width="80">{:lang('g_td_opt')}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {volist name="list" id="vo"}
+        <tr>
+            <td rowspan="{:$vo['count']}">{$vo['name']}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>{:$vo::$fields_status[$vo['status']]}</td>
+            <td>
+                <a href="{:url('cateAdd',['id'=>$vo['id']])}">{:lang('g_edit')}</a>
+                <a href="javascript:;" onclick="$.common.del(this,'{:url('cateDel')}',{'id':{:$vo['id']}})">{:lang('g_del')}</a>
+            </td>
+        </tr>
+            {volist name="vo['link_data']" id="ch"}
+            <tr>
+                <td rowspan="{:$ch['count']}">{$ch['name']}</td>
+                <td>-</td>
+                <td>{:$vo::$fields_status[$ch['status']]}</td>
+                <td>
+                    <a href="{:url('cateAdd',['id'=>$ch['id']])}">{:lang('g_edit')}</a>
+                    <a href="javascript:;" onclick="$.common.del(this,'{:url('cateDel')}',{'id':{:$ch['id']}})">{:lang('g_del')}</a>
+                </td>
+            </tr>
+                {volist name="ch['link_data']" id="chch"}
+                <tr>
+                    <td >{$chch['name']}</td>
+                    <td>{:$vo::$fields_status[$chch['status']]}</td>
+                    <td>
+                        <a href="{:url('cateAdd',['id'=>$chch['id']])}">{:lang('g_edit')}</a>
+                        <a href="javascript:;" onclick="$.common.del(this,'{:url('cateDel')}',{'id':{:$chch['id']}})" >{:lang('g_del')}</a>
+                    </td>
+                </tr>
+                {/volist}
+            {/volist}
+        {/volist}
+        </tbody>
+    </table>
+</div>
+
+{/block}
+
+{block name="script"}
+
+{/block}

@@ -1,11 +1,11 @@
 {extend name="base"/}
 <!--上级栏目-->
-{block name="slider_bar"}article-index{/block}
+{block name="slider_bar"}goods-brand{/block}
 <!--面包屑-->
 {block name="breadcrumb"}
 <i class="ace-icon fa fa-home fa-users"></i>
-<li>{:lang('c_article')}</li>
-<li>{:lang('c_article_list')}</li>
+<li>{:lang('c_goods')}</li>
+<li>{:lang('c_goods_brand')}</li>
 {/block}
 
 
@@ -18,7 +18,7 @@
 <div class="dataTables_wrapper form-inline no-footer">
     <div class="row">
         <div class="col-xs-6">
-            <a href="{:url('add')}" class="btn btn-sm btn-primary" type="button">{:c_lang($sys_master,'p_article_add')}</a>
+            <a href="{:url('brandAdd')}" class="btn btn-sm btn-primary" type="button">{:c_lang($sys_master,'p_goods_brand_add')}</a>
         </div>
         <div class="col-xs-5 text-right">
 
@@ -31,10 +31,10 @@
         <thead>
         <tr>
             <th width="80">{:lang('g_td_number')}</th>
-            <th width="120">{:c_lang($sys_master,'p_td_article_title')}</th>
-            <th width="120">{:c_lang($sys_master,'p_td_article_cate')}</th>
-            <th width="120">{:c_lang($sys_master,'p_td_article_status')}</th>
-            <th width="120">{:c_lang($sys_master,'p_td_article_date')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_brand_name')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_brand_en')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_brand_letter')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_goods_brand_status')}</th>
             <th width="80">{:lang('g_td_opt')}</th>
         </tr>
         </thead>
@@ -43,13 +43,13 @@
         {volist name="list" id="vo"}
             <tr>
                 <td>{:$i}</td>
-                <td>{$vo['title']}</td>
-                <td>{$vo['link_cate']['name']}</td>
+                <td>{$vo['name']}</td>
+                <td>{$vo['en']}</td>
+                <td>{$vo['letter']}</td>
                 <td>{:$vo::$fields_status[$vo['status']]}</td>
-                <td>{$vo['release_time']}</td>
                 <td>
-                    <a href="{:url('add',['id'=>$vo['id']])}">{:lang('g_edit')}</a>
-                    <a href="javascript:;" onclick="$.common.del(this,'{:url('del')}',{'id':{:$vo['id']}})" data-id="{$vo['id']}">{:lang('g_del')}</a>
+                    <a href="{:url('brandAdd',['id'=>$vo['id']])}">{:lang('g_edit')}</a>
+                    <a href="javascript:;" onclick="$.common.del(this,'{:url('brandDel')}',{'id':{:$vo['id']}})" data-id="{$vo['id']}">{:lang('g_del')}</a>
                 </td>
             </tr>
         {/volist}
@@ -57,7 +57,6 @@
     </table>
     {$page|raw}
 </div>
-
 
 {/block}
 

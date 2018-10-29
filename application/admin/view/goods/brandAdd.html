@@ -1,0 +1,127 @@
+{extend name="base"/}
+<!--上级栏目-->
+{block name="slider_bar"}goods-brand{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_goods')}</li>
+<li>{:lang('c_goods_brand')}</li>
+<li>{:lang('c_goods_brand_opt')}</li>
+{/block}
+
+
+{block name="content"}
+
+
+<!-- div.table-responsive -->
+
+<!-- div.dataTables_borderWrap -->
+
+<form class="form-horizontal col-sm-6 col-sm-offset-2" role="form" id="form" action="{:url('')}">
+    <input type="hidden" name="id" value="{$model['id']}" />
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> {:lang('g_name')} </label>
+
+        <div class="col-sm-9">
+            <input type="text"  placeholder="{:lang('g_name')}" name="name" value="{$model['name']}" class="form-control" maxlength="20"/>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> {:lang('g_en')} </label>
+
+        <div class="col-sm-9">
+            <input type="text"  placeholder="{:lang('g_en')}" name="en" value="{$model['en']}" class="form-control" maxlength="20"/>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,'p_f_goods_brand_letter')} </label>
+
+        <div class="col-sm-9">
+            <input type="text"  placeholder="{:c_lang($sys_master,'p_f_goods_brand_letter')}" name="letter" value="{$model['letter']}" class="form-control" maxlength="20"/>
+            <span class="help-block">{:c_lang($sys_master,'p_f_goods_brand_letter_notice')}</span>
+        </div>
+    </div>
+
+
+    <div class="form-group ace-thumbnails">
+        <label class="col-sm-3 control-label no-padding-right" > {:c_lang($sys_master,'p_f_goods_brand_logo')} </label>
+
+        <div class="col-sm-8  ">
+
+            <input type="hidden" name="img" value="{$model['img']}"/>
+            <button type="button" class="layui-btn alone-upload" lay-data="{ 'data':{ 'route':'goods_brand'}}" >
+                <i class="layui-icon">&#xe67c;</i>{:lang('g_upload_image')}
+            </button>
+            <img src="{:get_image_location($model['img'])}" width="80px" height="30px"/>
+
+
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,'p_f_goods_brand_intro')} </label>
+
+        <div class="col-sm-9">
+            <textarea class="form-control" rows="4" name="intro">{$model['intro']}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" > {:lang('g_status')} </label>
+
+        <div class="col-sm-9">
+            <label>
+                <input type="radio" name="status" value="1" class="ace" {$model['status']!=2?'checked':''}>
+                <span class="lbl"> {:lang('g_status_normal')}</span>
+            </label>
+            <label>
+                <input type="radio" name="status" value="2" class="ace" {$model['status']==2?'checked':''}>
+                <span class="lbl">  {:lang('g_status_close')}</span>
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" > {:lang('g_sort')} </label>
+
+        <div class="col-sm-9">
+            <input type="number" name="sort" value="{:$model['sort']?$model['sort']:100}"/>
+        </div>
+    </div>
+
+
+    <div class=" form-actions clearfix">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="button" id="submit" onclick="$.common.submit($(this).parents('form'))">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                {:lang('g_save')}
+            </button>
+
+        </div>
+    </div>
+
+</form>
+
+
+
+{/block}
+
+{block name="script"}
+<script src="/static/layui-v2.4.3/define_upload.js"></script>
+<script>
+    layui.use('upload',function(){
+        var upload = layui.upload; //得到 upload 对象
+        $.fn.upload_obj.upload_img(upload,'.alone-upload')
+
+    });
+    $(function(){
+
+    })
+</script>
+{/block}
