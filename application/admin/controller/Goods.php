@@ -7,9 +7,22 @@ class Goods extends Shop
     public function index()
     {
         return view('index',[
-
+            'list'=>[],
         ]);
     }
+
+    //商品-操作
+    public function add()
+    {
+        $attr_model = new \app\common\model\GoodsModel();
+        $attr_list = $attr_model->select();
+
+        return view('add',[
+            'model' =>null,
+            'attr_list'    =>  $attr_list,
+        ]);
+    }
+
 
     //品牌管理
     public function brand()

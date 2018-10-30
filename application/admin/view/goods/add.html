@@ -1,0 +1,336 @@
+{extend name="base"/}
+<!--上级栏目-->
+{block name="slider_bar"}goods-index{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_goods')}</li>
+<li>{:lang('c_goods_opt')}</li>
+{/block}
+
+
+{block name="content"}
+
+
+<!-- div.table-responsive -->
+
+<!-- div.dataTables_borderWrap -->
+
+<form class="form-horizontal" role="form" id="form" action="{:url('')}">
+    <input type="hidden" name="id" value="{$model['id']}"/>
+
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,'p_f_goods_cate')} </label>
+
+                <div class="col-sm-9">
+                    <select class="form-control">
+                        <option class="">{:c_lang($sys_master,'p_f_goods_cate_select')}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">
+                    {:c_lang($sys_master,'p_f_goods_brand')} </label>
+
+                <div class="col-sm-9">
+                    <select class="form-control">
+                        <option class="">{:c_lang($sys_master,'p_f_goods_brand_select')}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,'p_f_goods_name')} </label>
+
+                <div class="col-sm-9">
+                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_name')}" name="name"
+                           value="{$model['name']}" class="form-control" maxlength="20"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">
+                    {:c_lang($sys_master,'p_f_goods_subtitle')} </label>
+
+                <div class="col-sm-9">
+                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_subtitle')}" name="subtitle"
+                           value="{$model['subtitle']}" class="form-control" maxlength="20"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">
+                    {:c_lang($sys_master,'p_f_goods_subtitle')} </label>
+
+                <div class="col-sm-9">
+                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_subtitle')}" name="subtitle"
+                           value="{$model['subtitle']}" class="form-control" maxlength="20"/>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">
+                    {:c_lang($sys_master,'p_f_goods_cover_img')} </label>
+
+                <div class="col-sm-9">
+                    <input type="hidden" name="cover_img" value="{$model['cover_img']}"/>
+                    <button type="button" class="layui-btn alone-upload"
+                            lay-data='{: "data":{ "route":"goods_cover_img"}}'>
+                        <i class="layui-icon">&#xe67c;</i>{:lang('g_upload_image')}
+                    </button>
+                    <img src="{:get_image_location($model['cover_img'])}" width="80px" height="30px"/>
+                </div>
+            </div>
+
+
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> {:lang('g_status')} </label>
+
+                <div class="col-sm-9">
+                    <label>
+                        <input type="radio" name="status" value="1" class="ace" {$model['status']!=2?'checked':''}>
+                        <span class="lbl"> {:lang('g_status_normal')}</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="status" value="2" class="ace" {$model['status']==2?'checked':''}>
+                        <span class="lbl">  {:lang('g_status_close')}</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> {:lang('g_sort')} </label>
+
+                <div class="col-sm-9">
+                    <input type="number" name="sort" value="{:$model['sort']?$model['sort']:100}"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label>{:c_lang($sys_master,'p_f_goods_intro')}</label>
+
+                    <textarea class="form-control" rows="4" name="intro">{$model['intro']}</textarea>
+                </div>
+
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <div>
+                    <label>{:c_lang($sys_master,'p_f_goods_content')}</label>
+
+                    <textarea id="full_text" class="form-control" name="content">{$model['content']}</textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!--右侧-->
+        <div class="col-sm-6   col-sm-offset-1">
+            <h3 class="row header smaller lighter blue">
+                <span class="col-xs-6"> {:c_lang($sys_master,'p_goods_attr')} </span>
+            </h3>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
+                    {:c_lang($sys_master,'p_f_goods_model')} </label>
+
+                <div class="col-sm-10">
+                    <select class="">
+                        <option value="">{:c_lang($sys_master,'p_f_goods_model_select')}</option>
+                        {volist name="attr_list" id="vo"}
+                        <option value="{$vo['id']}">{$vo['name']}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label "> {:c_lang($sys_master,'p_f_goods_sku')} </label>
+
+                <div class="col-sm-10 " id="sku">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"> {:c_lang($sys_master,'p_f_goods_sku')} </label>
+
+                <div class="col-sm-10" id="spu">
+
+                </div>
+                <div id="sku-table">
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</form>
+
+
+{/block}
+
+{block name="script"}
+<script src="/static/layui-v2.4.3/define_upload.js"></script>
+<script>
+    layui.use(['upload', 'laydate', 'layedit'], function () {
+        var upload = layui.upload; //得到 upload 对象
+        $.fn.upload_obj.upload_img(upload, '.alone-upload')
+        //富文本
+        $.common.full_text(layui.layedit, 'goods');
+    });
+
+    var model_info = {
+        "sku":[
+            {
+                "group_name": "分组属性1", "type": "checkbox", "child": [
+                    {"attr": "属性1-1", "id": "17", "state": 1},
+                    {"attr": "属性1-2", "id": "18", "state": 1},
+                    {"attr": "属性1-3", "id": "19", "state": 1}
+                ]
+            },
+            {
+                "group_name": "分组属性2", "type": "button", "child": [
+                    {"attr": "属性2-1", "id": "17", "state": 1},
+                    {"attr": "属性2-2", "id": "17", "state": 1},
+                ]
+            },
+            {
+                "group_name": "分组属性3", "type": "checkbox", "child": [
+                    {"attr": "属性3-1", "id": "17", "state": 1},
+                    {"attr": "属性3-2", "id": "18", "state": 1},
+                    {"attr": "属性3-3", "id": "19", "state": 0}
+                ]
+            }
+        ],
+        "spu":[
+            {
+                "group_name": "分组属性1", "type": "checkbox", "child": [
+                    {"attr": "属性1-1", "id": "17", "state": 1},
+                    {"attr": "属性1-2", "id": "18", "state": 1},
+                    {"attr": "属性1-3", "id": "19", "state": 1}
+                ]
+            },
+            {
+                "group_name": "分组属性2", "type": "button", "child": [
+                    {"attr": "属性2-1", "id": "17", "state": 1},
+                ]
+            },
+            {
+                "group_name": "分组属性3", "type": "checkbox", "child": [
+                    {"attr": "属性3-1", "id": "17", "state": 1},
+                    {"attr": "属性3-2", "id": "18", "state": 1},
+                    {"attr": "属性3-3", "id": "19", "state": 0}
+                ]
+            }
+        ]
+    }
+
+    $(function () {
+
+    })
+    drawTable()
+    //绘制table
+    function drawTable() {
+        var sku_html = '';
+        //处理spu
+        handleSpu(model_info['spu']);
+        //处理sku
+        handleSku(model_info['sku']);
+        //处理显示数据
+        handleTable(model_info['sku'])
+    }
+    //处理sku数据
+    function handleSpu(data){
+        var html ='<div class="row widget-main no-padding-top no-padding-bottom">';
+
+        data.map(function (data, index) {
+            html += '' +
+                '<label>'+data.group_name+'：</label>' +
+                '<div class="widget-main no-padding-top">';
+            data['child'].map(function(child,ch_index){
+                html +='<label class="block">\n' +
+                    '   <input type="checkbox" name="" class="ace">\n' +
+                    '   <span class="lbl">'+child.attr+'</span>\n' +
+                    '   </label>'
+            })
+            html+='</div>'
+        })
+        html+='</div>'
+        $("#spu").html(html)
+    }
+    //处理sku数据
+    function handleSku(data){
+        var html ='';
+
+        data.map(function (data, index) {
+            html += '<div><label>'+data.group_name+'：</label>';
+            data['child'].map(function(child,ch_index){
+                html +='<label>\n' +
+                    '   <input type="checkbox" name="" class="ace">\n' +
+                    '   <span class="lbl">'+child.attr+'</span>\n' +
+                    '   </label>'
+            })
+            html+='</div>'
+        })
+        $("#sku").html(html)
+    }
+
+    //处理table数据
+    function handleTable(data)
+    {
+        var html = '<table class="table  table-bordered table-hover center">\n' +
+            '                        <thead>\n' +
+            '                        <tr>\n' +
+            '                            <td width="3%">\n' +
+            '                                <label class="pos-rel">\n' +
+            '                                    <input type="checkbox" class="ace">\n' +
+            '                                    <span class="lbl"></span>\n' +
+            '                                </label>\n' +
+            '                            </td>\n';
+        var tbody_html = '';
+
+        var arr = [];
+        data.map(function (data, index) {
+            html += '<td width="7%">' + data['group_name'] + '</td>';
+            arr.push(data.child)
+        })
+        var result = cartesianProductOf(arr)
+
+        result.map(function (child, index) {
+            tbody_html += '<tr><td width="3%"><label class="pos-rel"><input type="checkbox" class="ace"><span class="lbl"></span></label></td>';
+            for (var i = 0; i < child.length; i++) {
+                tbody_html += '<td>' + child[i].attr + '</td>';
+            }
+            tbody_html += '' +
+                '<td><input type="text" class="width-50"></td>' +
+                '<td><input type="text" class="width-50"></td>' +
+                '<td><input type="text" class="width-50"></td>' +
+                '<td><input type="text" class="width-50"></td>' +
+                '</tr>\n';
+        })
+
+        html += '<td width="7%">商品编码</td>' +
+            '<td width="7%">商品条码</td>' +
+            '<td width="7%">商品价格</td>' +
+            '<td width="7%">库存</td>' +
+            '</tr></thead>\n' + tbody_html + '</table>'
+        console.log(html)
+        $("#sku-table").html(html)
+    }
+
+    function cartesianProductOf() {
+        return Array.prototype.reduce.call(arguments[0], function (a, b) {
+            var ret = [];
+            a.forEach(function (a) {
+                b.forEach(function (b) {
+                    ret.push(a.concat([b]));
+                });
+            });
+            return ret;
+        }, [[]]);
+    }
+</script>
+{/block}

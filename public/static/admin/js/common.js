@@ -34,9 +34,10 @@
         },
 
         //富文本
-        full_text:function(layedit,route,height){
+        full_text:function(layedit,route,obj,height){
             var url = this.get_do_main()+'/upload/layuiUpload/route/'+route
-            var index = layedit.build('full_text',{
+            obj = obj?obj:'full_text';
+            var index = layedit.build(obj,{
                 uploadImage:{
                     'url':url
                 }

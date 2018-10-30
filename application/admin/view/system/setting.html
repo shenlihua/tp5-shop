@@ -59,7 +59,7 @@
                                         {elseif ($ch['type']=='file')/}
                                             <input type="hidden" name="{$info_key}" value="{$ch['value']}"/>
                                             <button type="button" class="layui-btn alone-upload"  lay-data='{:json_encode($ch["store_range"])}'   >
-                                                <i class="layui-icon">&#xe67c;</i>上传文件
+                                                <i class="layui-icon">&#xe67c;</i>{:lang('g_upload_file')}
                                             </button>
                                             <img src="{:get_image_location($ch['value'])}" width="80px" height="30px"/>
                                         {elseif ($ch['type']=='select')/}
