@@ -123,6 +123,21 @@
 <script>
 
     $(function(){
+        //切换模型
+        $("select[name='mid']").change(function(){
+            var $this = $(this)
+            var id = $this.val()
+            var html ='';
+            $.post("{:url('getModelType')}",{id:id},function(result){
+                if(result.code==1){
+                    result.data.map(function(data,index){
+                        html += '<option value="'+data.value+'">'+data.name+'</option>';
+                    })
+                    $("select[name='key']").html(html)
+
+                }
+            })
+        })
         //所属分类
         $("input[name='cate']").change(function(){
             var value = $(this).val();
@@ -136,7 +151,7 @@
         //所属类型
         $("input[name='type']").change(function(){
             var value = $(this).val();
-            console.log(value)
+            // console.log(value)
             if(value==1) {
                 $("textarea[name='enum']").attr('disabled',false);
             }else{

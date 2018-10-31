@@ -14,11 +14,27 @@ class Goods extends Shop
     //商品-操作
     public function add()
     {
+        //商品分类
+        $cate_model = model('goodsCate');
+        $cate_list = $cate_model
+            ->with(['linkData'=>function($query){
+                $query->with(['linkData'=>function($query){
+                    $query->where('status','=',1);
+                }])->where('status','=',1);
+            }])
+            ->where([['status','=',1],['pid','=',0]])
+            ->select();
+        //品牌
+        $brand_model = model('goodsBrand');
+        $brand_list = $brand_model->where('status','=',1)->select();
+        //模型
         $attr_model = new \app\common\model\GoodsModel();
         $attr_list = $attr_model->select();
 
         return view('add',[
             'model' =>null,
+            'brand_list'    =>  $brand_list,
+            'cate_list'    =>  $cate_list,
             'attr_list'    =>  $attr_list,
         ]);
     }
@@ -211,5 +227,93 @@ class Goods extends Shop
             'cate' => $cate,
             'model' => $model,
         ]);
+    }
+    //模型分组
+    public function getModelType()
+    {
+        $id = $this->request->param('id',0,'intval');
+        $model = new \app\common\model\GoodsModel();
+        $model = $model->where('id','=',$id)->find();
+        $attr = explode(PHP_EOL,$model['attr']);
+
+        $data = [];
+        foreach($attr as $key=>$em) {
+            $data[]= [
+                'value' => $key,
+                'name'  => $em,
+            ];
+        }
+
+        return ['code'=>1,'msg'=>'获取成功','data'=>$data];
+    }
+
+    //获取商品模型数据
+    public function getModelAttr()
+    {
+        $id = $this->request->param('id',0,'intval');
+        $model = new \app\common\model\GoodsModel();
+        $model = $model->where('id','=',$id)->find();
+
+        $attr = explode(PHP_EOL,$model['attr']);
+        //dump($model);exit;
+        $attr_model = new \app\common\model\GoodsModelAttr();
+        $list = $attr_model->where('mid','=',$id)->order('sort','asc')->select();
+        $data = [
+            'sku'=>[],
+            'spu'=>[],
+        ];
+        foreach($list as $vo) {
+            $enum = explode(PHP_EOL,$vo['enum']);
+            $child = [];
+
+            if($vo['cate']==1) {
+                if($vo['type']==1){ //枚举类型
+                    foreach($enum as $key=>$em) {
+                        $child[]= [
+                            'attr' => $em,
+                            'type'       => $vo['type']==1 ? 'enum' : 'auto',
+                            'state' => 1,
+                            'id'    => $key
+                        ];
+                    }
+                }
+                $data['sku'][] = [
+                    'group_name' => $vo['name'],
+                    'id'         => $vo['id'],
+                    'type'       => $vo['type']==1 ? 'enum' : 'auto',
+                    'child'      => $child
+                ];
+
+            }else{
+
+                if($vo['type']==1){ //枚举类型
+                    foreach($enum as $key=>$em) {
+                        $child[]= [
+                            'value' => $key,
+                            'name'  => $em,
+                        ];
+                    }
+                }
+                $child = [
+                    'attr'   => $vo['name'],
+                    'id'     => $vo['id'],
+                    'state'  => 1,
+                    'type'   => $vo['type']==1 ? 'enum' : 'auto',
+                    'data'   => $child,
+                ];
+                if(array_key_exists($vo['key'],$data['spu'])){
+                    $data['spu'][$vo['key']]['child'][] = $child;
+                }else{
+                    $data['spu'][$vo['key']] = [
+                        'group_name' => $attr[$vo['key']],
+                        'id'         => $vo['id'],
+                        'child'      => [$child]
+                    ];
+                }
+
+            }
+        }
+        $data['spu'] && $data['spu'] = array_values($data['spu']);
+        return ['code'=>1,'msg'=>'获取成功','data'=>$data];
     }
 }

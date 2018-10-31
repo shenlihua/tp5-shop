@@ -17,6 +17,10 @@
 <!-- div.dataTables_borderWrap -->
 
 <form class="form-horizontal" role="form" id="form" action="{:url('')}">
+    <h4 class="blue">
+        <a class="btn btn-white btn-info btn-bold submit">{:c_lang('g_save')}</a>
+    </h4>
+
     <input type="hidden" name="id" value="{$model['id']}"/>
 
     <div class="row">
@@ -27,6 +31,18 @@
                 <div class="col-sm-9">
                     <select class="form-control">
                         <option class="">{:c_lang($sys_master,'p_f_goods_cate_select')}</option>
+                        {volist name="cate_list" id="vo"}
+                        <option class="{$vo['id']}">{$vo['name']}</option>
+
+                            {volist name="vo['link_data']" id="ch"}
+                            <option class="{$ch['id']}">&nbsp;&nbsp;{$ch['name']}</option>
+                                {volist name="ch['link_data']" id="chch"}
+                                <option class="{$chch['id']}">&nbsp;&nbsp;&nbsp;&nbsp;{$chch['name']}</option>
+                                {/volist}
+                            {/volist}
+
+
+                        {/volist}
                     </select>
                 </div>
             </div>
@@ -37,6 +53,9 @@
                 <div class="col-sm-9">
                     <select class="form-control">
                         <option class="">{:c_lang($sys_master,'p_f_goods_brand_select')}</option>
+                        {volist name="brand_list" id="vo"}
+                        <option class="{$vo['id']}">{$vo['name']}</option>
+                        {/volist}
                     </select>
                 </div>
             </div>
@@ -128,9 +147,8 @@
             </div>
 
         </div>
-
         <!--右侧-->
-        <div class="col-sm-6   col-sm-offset-1">
+        <div class="col-sm-7">
             <h3 class="row header smaller lighter blue">
                 <span class="col-xs-6"> {:c_lang($sys_master,'p_goods_attr')} </span>
             </h3>
@@ -139,7 +157,7 @@
                     {:c_lang($sys_master,'p_f_goods_model')} </label>
 
                 <div class="col-sm-10">
-                    <select class="">
+                    <select class="" name="mid">
                         <option value="">{:c_lang($sys_master,'p_f_goods_model_select')}</option>
                         {volist name="attr_list" id="vo"}
                         <option value="{$vo['id']}">{$vo['name']}</option>
@@ -155,7 +173,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label"> {:c_lang($sys_master,'p_f_goods_sku')} </label>
+                <label class="col-sm-2 control-label"> {:c_lang($sys_master,'p_f_goods_spu')} </label>
 
                 <div class="col-sm-10" id="spu">
 
@@ -167,8 +185,19 @@
 
         </div>
     </div>
-</form>
 
+</form>
+<div id="sku-content" style="display:none">
+    <table class="table center">
+        <tbody>
+        <tr>
+            <td>{:c_lang($sys_master,'p_f_goods_cate')}:</td>
+            <td><input type="text"/></td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
 
 {/block}
 
@@ -182,56 +211,59 @@
         $.common.full_text(layui.layedit, 'goods');
     });
 
-    var model_info = {
-        "sku":[
-            {
-                "group_name": "分组属性1", "type": "checkbox", "child": [
-                    {"attr": "属性1-1", "id": "17", "state": 1},
-                    {"attr": "属性1-2", "id": "18", "state": 1},
-                    {"attr": "属性1-3", "id": "19", "state": 1}
-                ]
-            },
-            {
-                "group_name": "分组属性2", "type": "button", "child": [
-                    {"attr": "属性2-1", "id": "17", "state": 1},
-                    {"attr": "属性2-2", "id": "17", "state": 1},
-                ]
-            },
-            {
-                "group_name": "分组属性3", "type": "checkbox", "child": [
-                    {"attr": "属性3-1", "id": "17", "state": 1},
-                    {"attr": "属性3-2", "id": "18", "state": 1},
-                    {"attr": "属性3-3", "id": "19", "state": 0}
-                ]
-            }
-        ],
-        "spu":[
-            {
-                "group_name": "分组属性1", "type": "checkbox", "child": [
-                    {"attr": "属性1-1", "id": "17", "state": 1},
-                    {"attr": "属性1-2", "id": "18", "state": 1},
-                    {"attr": "属性1-3", "id": "19", "state": 1}
-                ]
-            },
-            {
-                "group_name": "分组属性2", "type": "button", "child": [
-                    {"attr": "属性2-1", "id": "17", "state": 1},
-                ]
-            },
-            {
-                "group_name": "分组属性3", "type": "checkbox", "child": [
-                    {"attr": "属性3-1", "id": "17", "state": 1},
-                    {"attr": "属性3-2", "id": "18", "state": 1},
-                    {"attr": "属性3-3", "id": "19", "state": 0}
-                ]
-            }
-        ]
-    }
+    var model_info = {}
+
+
 
     $(function () {
+        $("#sku").on('click','.add-sku',function(){
+            var $this = $(this)
+            //索引
+            var sku_index = $(this).parent().index()
+            layer.open({
+                type:1,
+                btn:['确定','取消'],
+                title:'添加sku',
+                area:["300px","180px"],
+                content:$("#sku-content"),
+                yes:function(index, layero){
+                    var value = $.trim(layero.find("input[type='text']").val())
+                    if(value){
+                        model_info['sku'][sku_index].child.push({"attr":value,"state":1})
+                        //每次操作重新渲染
+                        //处理sku
+                        handleSku(model_info['sku']);
+                        handleTable(model_info['sku'])
+                    }
+                }
+            })
+        })
+        //sku枚举类型
+        $("#sku").on('change','input[type="checkbox"]',function(){
+            var bool = $(this).prop("checked");
+            //索引
+            var index = $(this).parents('div').index()
+            var current_index = $(this).parent().index()-1;
+            //alert(index+'-'+current_index)
+            model_info['sku'][index]['child'][current_index]['state'] = bool?1:0
+            // console.log(model_info['sku'][index]['child'])
+            //操作节点
 
+            //每次操作重新渲染
+            handleTable(model_info['sku'])
+        })
+        //属性选择
+        $("select[name='mid']").change(function(){
+            var id =$(this).val()
+            $.post("{:url('getModelAttr')}",{id:id},function (result) {
+                var data = result.data;
+                model_info = data;
+            }).then(function(){
+                drawTable()
+            })
+        })
     })
-    drawTable()
+    // drawTable()
     //绘制table
     function drawTable() {
         var sku_html = '';
@@ -242,19 +274,32 @@
         //处理显示数据
         handleTable(model_info['sku'])
     }
-    //处理sku数据
+    //处理spu数据
     function handleSpu(data){
         var html ='<div class="row widget-main no-padding-top no-padding-bottom">';
 
         data.map(function (data, index) {
             html += '' +
-                '<label>'+data.group_name+'：</label>' +
+                '<label>'+data.group_name+'</label>' +
                 '<div class="widget-main no-padding-top">';
             data['child'].map(function(child,ch_index){
                 html +='<label class="block">\n' +
-                    '   <input type="checkbox" name="" class="ace">\n' +
-                    '   <span class="lbl">'+child.attr+'</span>\n' +
-                    '   </label>'
+                    '   <span class="lbl">'+child.attr+'：</span>\n';
+                if(child.type=='enum'){
+                    //枚举
+                    html += '<select class="width-50" name="spu['+child.id+']"><option value="">{:lang("g_select")}</option>';
+
+                    child['data'].map(function(ch_data,ch_d_index){
+                        html +='<option value="'+ch_data.value+'">'+ch_data.name+'</option>';
+                    })
+                    html += '</select>'
+
+                }else{
+                    //自定义
+                    html+=   '   <input type="text" name="spu['+child.id+']" value="" class="width-50">\n'
+
+                }
+                html+='</label>';
             })
             html+='</div>'
         })
@@ -267,12 +312,18 @@
 
         data.map(function (data, index) {
             html += '<div><label>'+data.group_name+'：</label>';
+
             data['child'].map(function(child,ch_index){
                 html +='<label>\n' +
-                    '   <input type="checkbox" name="" class="ace">\n' +
+                    '   <input type="checkbox" name="sku['+child.id+']" '+(child.state==1?'checked':'')+' class="ace">\n' +
                     '   <span class="lbl">'+child.attr+'</span>\n' +
                     '   </label>'
+
             })
+
+            if(data.type=='auto') {
+                html+='<a href="javascript:;" data-id="'+data.id+'" class="btn btn-minier btn-primary add-sku"> {:lang("g_auto")}</a>'
+            }
             html+='</div>'
         })
         $("#sku").html(html)
@@ -294,10 +345,21 @@
 
         var arr = [];
         data.map(function (data, index) {
-            html += '<td width="7%">' + data['group_name'] + '</td>';
-            arr.push(data.child)
+            if( data.child.length > 0 ){
+                var show_data = [];
+                data.child.map(function(arr,a_index){
+                    arr.state && show_data.push(arr);
+                })
+                if(show_data.length){
+                    html += '<td width="7%" class="tr-'+index+'">' + data['group_name'] + '</td>';
+                    arr.push(show_data)
+                }
+            }
+
         })
-        var result = cartesianProductOf(arr)
+
+        var   result = cartesianProductOf(arr)
+
 
         result.map(function (child, index) {
             tbody_html += '<tr><td width="3%"><label class="pos-rel"><input type="checkbox" class="ace"><span class="lbl"></span></label></td>';
@@ -312,14 +374,16 @@
                 '</tr>\n';
         })
 
-        html += '<td width="7%">商品编码</td>' +
-            '<td width="7%">商品条码</td>' +
-            '<td width="7%">商品价格</td>' +
-            '<td width="7%">库存</td>' +
+        html += '<td width="7%">{:c_lang($sys_master,"p_td_goods_code")}</td>' +
+            '<td width="7%">{:c_lang($sys_master,"p_td_goods_bar_code")}商品条码</td>' +
+            '<td width="7%">{:c_lang($sys_master,"p_td_goods_price")}</td>' +
+            '<td width="7%">{:c_lang($sys_master,"p_td_goods_stock")}</td>' +
             '</tr></thead>\n' + tbody_html + '</table>'
-        console.log(html)
+        // console.log(html)
         $("#sku-table").html(html)
     }
+
+
 
     function cartesianProductOf() {
         return Array.prototype.reduce.call(arguments[0], function (a, b) {
