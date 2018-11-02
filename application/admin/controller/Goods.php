@@ -6,7 +6,26 @@ class Goods extends Shop
     //商品列表
     public function index()
     {
-        $list = model('Goods')->with(['linkPrice'])->paginate();
+        $list = model('Goods')->with(['linkAttr','linkPrice'])->paginate()->each(function($item, $key){
+//            $attr = array_column($item['link_attr'],null,$);
+            $attr = [];
+            foreach($item['link_attr'] as $vo) {
+                $attr[$vo['id']] = $vo['val'];
+            }
+
+            foreach($item['link_price'] as &$pr) {
+                $attr_ext = [];
+                foreach ($pr['attr_info'] as $index){
+                    $attr_ext[] = [
+                        'name'  => isset($attr[$index])?$attr[$index]:'',
+                        'value' => $index
+                    ];
+                }
+                unset($pr['attr_info']);
+                $pr['attr_info_ext'] = $attr_ext;
+            }
+        });
+
         return view('index',[
             'list'=>$list,
         ]);
@@ -26,6 +45,8 @@ class Goods extends Shop
 
             return $model->actionAdd($input_data,$validate);
         }
+        //商品信息
+        $model = $model->where('id','=',$id)->find();
         //商品分类
         $cate_model = model('goodsCate');
         $cate_list = $cate_model
@@ -44,7 +65,7 @@ class Goods extends Shop
         $attr_list = $attr_model->select();
 
         return view('add',[
-            'model' =>null,
+            'model' => $model,
             'brand_list'    =>  $brand_list,
             'cate_list'    =>  $cate_list,
             'attr_list'    =>  $attr_list,
@@ -262,72 +283,11 @@ class Goods extends Shop
     //获取商品模型数据
     public function getModelAttr()
     {
-        $id = $this->request->param('id',0,'intval');
-        $model = new \app\common\model\GoodsModel();
-        $model = $model->where('id','=',$id)->find();
+        $id = $this->request->param('id',0,'intval'); //模型id
+        $gid = $this->request->param('gid',0,'intval');//商品id
+        $goods_model = new \app\common\model\Goods();
+        list($sku,$spu,$stock) = $goods_model->goodsAttr($id,$gid);
 
-        $attr = explode(PHP_EOL,$model['attr']);
-        //dump($model);exit;
-        $attr_model = new \app\common\model\GoodsModelAttr();
-        $list = $attr_model->where('mid','=',$id)->order('sort','asc')->select();
-        $data = [
-            'sku'=>[],
-            'spu'=>[],
-        ];
-        foreach($list as $vo) {
-            $enum = explode(PHP_EOL,$vo['enum']);
-            $child = [];
-
-            if($vo['cate']==1) {
-                if($vo['type']==1){ //枚举类型
-                    foreach($enum as $key=>$em) {
-                        $child[]= [
-                            'attr' => $em,
-                            'type'       => $vo['type']==1 ? 'enum' : 'auto',
-                            'state' => 1,
-                            'id'    => $key,
-                            'pid'    => $vo['id'],
-                        ];
-                    }
-                }
-                $data['sku'][] = [
-                    'group_name' => $vo['name'],
-                    'id'         => $vo['id'],
-                    'type'       => $vo['type']==1 ? 'enum' : 'auto',
-                    'child'      => $child
-                ];
-
-            }else{
-
-                if($vo['type']==1){ //枚举类型
-                    foreach($enum as $key=>$em) {
-                        $child[]= [
-                            'value' => $key,
-                            'name'  => $em,
-                        ];
-                    }
-                }
-                $child = [
-                    'attr'   => $vo['name'],
-                    'id'     => $vo['id'],
-                    'pid'    => $vo['id'],
-                    'state'  => 1,
-                    'type'   => $vo['type']==1 ? 'enum' : 'auto',
-                    'data'   => $child,
-                ];
-                if(array_key_exists($vo['key'],$data['spu'])){
-                    $data['spu'][$vo['key']]['child'][] = $child;
-                }else{
-                    $data['spu'][$vo['key']] = [
-                        'group_name' => $attr[$vo['key']],
-                        'id'         => $vo['id'],
-                        'child'      => [$child]
-                    ];
-                }
-
-            }
-        }
-        $data['spu'] && $data['spu'] = array_values($data['spu']);
-        return ['code'=>1,'msg'=>'获取成功','data'=>$data];
+        return ['code'=>1,'msg'=>'获取成功','data'=>['sku'=>$sku,'spu'=>$spu,'stock'=>$stock]];
     }
 }

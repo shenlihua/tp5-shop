@@ -32,12 +32,12 @@
                     <select class="form-control" name="goods[cid]">
                         <option value="">{:c_lang($sys_master,'p_f_goods_cate_select')}</option>
                         {volist name="cate_list" id="vo"}
-                        <option value="{$vo['id']}">{$vo['name']}</option>
+                        <option value="{$vo['id']}" {:$model['cid']==$vo['id']?'selected':''}>{$vo['name']}</option>
 
                             {volist name="vo['link_data']" id="ch"}
-                            <option value="{$ch['id']}">&nbsp;&nbsp;{$ch['name']}</option>
+                            <option value="{$ch['id']}" {:$model['cid']==$ch['id']?'selected':''}>&nbsp;&nbsp;{$ch['name']}</option>
                                 {volist name="ch['link_data']" id="chch"}
-                                <option value="{$chch['id']}">&nbsp;&nbsp;&nbsp;&nbsp;{$chch['name']}</option>
+                                <option value="{$chch['id']}" {:$model['cid']==$chch['id']?'selected':''}>&nbsp;&nbsp;&nbsp;&nbsp;{$chch['name']}</option>
                                 {/volist}
                             {/volist}
 
@@ -54,7 +54,7 @@
                     <select class="form-control" name="goods[bid]">
                         <option value="">{:c_lang($sys_master,'p_f_goods_brand_select')}</option>
                         {volist name="brand_list" id="vo"}
-                        <option value="{$vo['id']}">{$vo['name']}</option>
+                        <option value="{$vo['id']}"  {:$model['bid']==$vo['id']?'selected':''}>{$vo['name']}</option>
                         {/volist}
                     </select>
                 </div>
@@ -151,7 +151,7 @@
                     <select class="" name="goods[mid]">
                         <option value="">{:c_lang($sys_master,'p_f_goods_model_select')}</option>
                         {volist name="attr_list" id="vo"}
-                        <option value="{$vo['id']}">{$vo['name']}</option>
+                        <option value="{$vo['id']}"  {:$model['mid']==$vo['id']?'selected':''}>{$vo['name']}</option>
                         {/volist}
                     </select>
                 </div>
@@ -220,8 +220,9 @@
                 yes:function(index, layero){
                     var value = $.trim(layero.find("input[type='text']").val())
                     if(value){
+                        var pid = model_info['sku'][sku_index].id;
                         var id = model_info['sku'][sku_index].child.length;
-                        model_info['sku'][sku_index].child.push({"attr":value,"state":1,"id":id})
+                        model_info['sku'][sku_index].child.push({"attr":value,"state":1,"id":id,"pid":pid})
                         //每次操作重新渲染
                         //处理sku
                         handleSku(model_info['sku']);
@@ -246,14 +247,18 @@
         })
         //属性选择
         $("select[name='goods[mid]']").change(function(){
+            var gid = $("input[name='goods[id]']").val();
             var id =$(this).val()
-            $.post("{:url('getModelAttr')}",{id:id},function (result) {
+            $.post("{:url('getModelAttr')}",{id:id,gid:gid},function (result) {
                 var data = result.data;
                 model_info = data;
             }).then(function(){
                 drawTable()
             })
         })
+
+        $("select[name='goods[mid]']").change()
+
     })
     // drawTable()
     //绘制table
@@ -282,13 +287,13 @@
                     html += '<select class="width-50" name="spu['+child.id+']"><option value="">{:lang("g_select")}</option>';
 
                     child['data'].map(function(ch_data,ch_d_index){
-                        html +='<option value="'+ch_data.name+'">'+ch_data.name+'</option>';
+                        html +='<option value="'+ch_data.name+'" '+(ch_data.name==child.value?'selected':'')+'>'+ch_data.name+'</option>';
                     })
                     html += '</select>'
 
                 }else{
                     //自定义
-                    html+=   '   <input type="text" name="spu['+child.id+']" value="" class="width-50">\n'
+                    html+=   '   <input type="text" name="spu['+child.id+']" value="'+child.value+'" class="width-50">\n'
 
                 }
                 html+='</label>';
@@ -349,20 +354,30 @@
             }
 
         })
+        //库存信息
+        var   stock_info = model_info['stock']
 
         var   result = cartesianProductOf(arr)
 
 
         result.map(function (child, index) {
             tbody_html += '<tr><td width="3%"><label class="pos-rel"><input type="checkbox" name="sku[]" value="'+index+'" checked class="ace"><span class="lbl"></span></label></td>';
+            var attr_index = [];
             for (var i = 0; i < child.length; i++) {
-                tbody_html += '<td>' + child[i].attr + '<input type="hidden" name="attr['+index+']['+data[i].id+'_'+child[i].id+']" value="'+child[i].attr+'"></td>';
+                attr_index.push(child[i].id)
+                tbody_html += '<td>' + child[i].attr + '<input type="hidden" name="attr['+index+']['+child[i].pid+'_'+child[i].id+']" value="'+child[i].attr+'"></td>';
             }
+            attr_index = attr_index.join('|')
+
             tbody_html += '' +
-                '<td><input type="text" name="code['+index+']" class="width-50"></td>' +
-                '<td><input type="text" name="bar_code['+index+']" class="width-50"></td>' +
-                '<td><input type="text" name="price['+index+']" class="width-50"></td>' +
-                '<td><input type="text" name="stock['+index+']" class="width-50"></td>' +
+                '<td><input type="text" name="code['+index+']" value="'+(stock_info.hasOwnProperty(attr_index)?stock_info[attr_index].code:'')+'" class="width-60"></td>' +
+                '<td><input type="text" name="bar_code['+index+']" value="'+(stock_info.hasOwnProperty(attr_index)?stock_info[attr_index].bar_code:'')+'" class="width-60"></td>' +
+                '<td><input type="number" name="price['+index+']" value="'+(stock_info.hasOwnProperty(attr_index)?stock_info[attr_index].price:'')+'" class="width-60"></td>' +
+                '<td>' +
+                '<input type="number" name="stock['+index+']" value="'+(stock_info.hasOwnProperty(attr_index)?stock_info[attr_index].stock:'')+'" class="width-60">' +
+                '<input type="hidden" name="goods_stock_index[]" value="'+(stock_info.hasOwnProperty(attr_index)?stock_info[attr_index].id:'')+'"/>'+
+                '</td>' +
+
                 '</tr>\n';
         })
 

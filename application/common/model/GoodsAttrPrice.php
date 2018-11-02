@@ -10,7 +10,7 @@ class GoodsAttrPrice extends BaseModel
 
     protected $name = 's_goods_attr_price';
 
-    public function getAttrInfo($value)
+    public function getAttrInfoAttr($value)
     {
         return $value?explode('|',$value):[];
     }
