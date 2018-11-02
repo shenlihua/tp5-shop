@@ -32,7 +32,7 @@
         <tr>
             <th width="80">{:lang('g_td_number')}</th>
             <th width="120">{:c_lang($sys_master,'p_td_goods_name')}</th>
-            <th width="120">{:c_lang($sys_master,'p_td_goods_label')}</th>
+            <!--<th width="120">{:c_lang($sys_master,'p_td_goods_label')}</th>-->
             <th width="120">{:c_lang($sys_master,'p_td_goods_sku')}</th>
             <th width="120">{:c_lang($sys_master,'p_td_goods_status')}</th>
             <th width="80">{:lang('g_td_opt')}</th>
@@ -44,8 +44,7 @@
         <tr>
             <td>{:$i}</td>
             <td>{$vo['name']}</td>
-            <td>{$vo['en']}</td>
-            <td>{$vo['letter']}</td>
+            <td><a</td>
             <td>{:$vo::$fields_status[$vo['status']]}</td>
             <td>
                 <a href="{:url('add',['id'=>$vo['id']])}">{:lang('g_edit')}</a>

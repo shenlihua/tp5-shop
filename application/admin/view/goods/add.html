@@ -18,10 +18,10 @@
 
 <form class="form-horizontal" role="form" id="form" action="{:url('')}">
     <h4 class="blue">
-        <a class="btn btn-white btn-info btn-bold submit">{:c_lang('g_save')}</a>
+        <a class="btn btn-white btn-info btn-bold submit" href="javascript:;" onclick="$.common.submit($('#form'))">{:c_lang('g_save')}</a>
     </h4>
 
-    <input type="hidden" name="id" value="{$model['id']}"/>
+    <input type="hidden" name="goods[id]" value="{$model['id']}"/>
 
     <div class="row">
         <div class="col-sm-5">
@@ -29,15 +29,15 @@
                 <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,'p_f_goods_cate')} </label>
 
                 <div class="col-sm-9">
-                    <select class="form-control">
-                        <option class="">{:c_lang($sys_master,'p_f_goods_cate_select')}</option>
+                    <select class="form-control" name="goods[cid]">
+                        <option value="">{:c_lang($sys_master,'p_f_goods_cate_select')}</option>
                         {volist name="cate_list" id="vo"}
-                        <option class="{$vo['id']}">{$vo['name']}</option>
+                        <option value="{$vo['id']}">{$vo['name']}</option>
 
                             {volist name="vo['link_data']" id="ch"}
-                            <option class="{$ch['id']}">&nbsp;&nbsp;{$ch['name']}</option>
+                            <option value="{$ch['id']}">&nbsp;&nbsp;{$ch['name']}</option>
                                 {volist name="ch['link_data']" id="chch"}
-                                <option class="{$chch['id']}">&nbsp;&nbsp;&nbsp;&nbsp;{$chch['name']}</option>
+                                <option value="{$chch['id']}">&nbsp;&nbsp;&nbsp;&nbsp;{$chch['name']}</option>
                                 {/volist}
                             {/volist}
 
@@ -51,10 +51,10 @@
                     {:c_lang($sys_master,'p_f_goods_brand')} </label>
 
                 <div class="col-sm-9">
-                    <select class="form-control">
-                        <option class="">{:c_lang($sys_master,'p_f_goods_brand_select')}</option>
+                    <select class="form-control" name="goods[bid]">
+                        <option value="">{:c_lang($sys_master,'p_f_goods_brand_select')}</option>
                         {volist name="brand_list" id="vo"}
-                        <option class="{$vo['id']}">{$vo['name']}</option>
+                        <option value="{$vo['id']}">{$vo['name']}</option>
                         {/volist}
                     </select>
                 </div>
@@ -63,7 +63,7 @@
                 <label class="col-sm-3 control-label no-padding-right"> {:c_lang($sys_master,'p_f_goods_name')} </label>
 
                 <div class="col-sm-9">
-                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_name')}" name="name"
+                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_name')}" name="goods[name]"
                            value="{$model['name']}" class="form-control" maxlength="20"/>
                 </div>
             </div>
@@ -73,20 +73,11 @@
                     {:c_lang($sys_master,'p_f_goods_subtitle')} </label>
 
                 <div class="col-sm-9">
-                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_subtitle')}" name="subtitle"
+                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_subtitle')}" name="goods[subtitle]"
                            value="{$model['subtitle']}" class="form-control" maxlength="20"/>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label no-padding-right">
-                    {:c_lang($sys_master,'p_f_goods_subtitle')} </label>
-
-                <div class="col-sm-9">
-                    <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_subtitle')}" name="subtitle"
-                           value="{$model['subtitle']}" class="form-control" maxlength="20"/>
-                </div>
-            </div>
 
 
             <div class="form-group">
@@ -94,7 +85,7 @@
                     {:c_lang($sys_master,'p_f_goods_cover_img')} </label>
 
                 <div class="col-sm-9">
-                    <input type="hidden" name="cover_img" value="{$model['cover_img']}"/>
+                    <input type="hidden" name="goods[cover_img]" value="{$model['cover_img']}"/>
                     <button type="button" class="layui-btn alone-upload"
                             lay-data='{: "data":{ "route":"goods_cover_img"}}'>
                         <i class="layui-icon">&#xe67c;</i>{:lang('g_upload_image')}
@@ -112,11 +103,11 @@
 
                 <div class="col-sm-9">
                     <label>
-                        <input type="radio" name="status" value="1" class="ace" {$model['status']!=2?'checked':''}>
+                        <input type="radio" name="goods[status]" value="1" class="ace" {$model['status']!=2?'checked':''}>
                         <span class="lbl"> {:lang('g_status_normal')}</span>
                     </label>
                     <label>
-                        <input type="radio" name="status" value="2" class="ace" {$model['status']==2?'checked':''}>
+                        <input type="radio" name="goods[status]" value="2" class="ace" {$model['status']==2?'checked':''}>
                         <span class="lbl">  {:lang('g_status_close')}</span>
                     </label>
                 </div>
@@ -125,7 +116,7 @@
                 <label class="col-sm-3 control-label no-padding-right"> {:lang('g_sort')} </label>
 
                 <div class="col-sm-9">
-                    <input type="number" name="sort" value="{:$model['sort']?$model['sort']:100}"/>
+                    <input type="number" name="goods[sort]" value="{:$model['sort']?$model['sort']:100}"/>
                 </div>
             </div>
 
@@ -133,7 +124,7 @@
                 <div>
                     <label>{:c_lang($sys_master,'p_f_goods_intro')}</label>
 
-                    <textarea class="form-control" rows="4" name="intro">{$model['intro']}</textarea>
+                    <textarea class="form-control" rows="4" name="goods[intro]">{$model['intro']}</textarea>
                 </div>
 
             </div>
@@ -142,7 +133,7 @@
                 <div>
                     <label>{:c_lang($sys_master,'p_f_goods_content')}</label>
 
-                    <textarea id="full_text" class="form-control" name="content">{$model['content']}</textarea>
+                    <textarea id="full_text" class="form-control" name="goods[content]">{$model['content']}</textarea>
                 </div>
             </div>
 
@@ -157,7 +148,7 @@
                     {:c_lang($sys_master,'p_f_goods_model')} </label>
 
                 <div class="col-sm-10">
-                    <select class="" name="mid">
+                    <select class="" name="goods[mid]">
                         <option value="">{:c_lang($sys_master,'p_f_goods_model_select')}</option>
                         {volist name="attr_list" id="vo"}
                         <option value="{$vo['id']}">{$vo['name']}</option>
@@ -229,7 +220,8 @@
                 yes:function(index, layero){
                     var value = $.trim(layero.find("input[type='text']").val())
                     if(value){
-                        model_info['sku'][sku_index].child.push({"attr":value,"state":1})
+                        var id = model_info['sku'][sku_index].child.length;
+                        model_info['sku'][sku_index].child.push({"attr":value,"state":1,"id":id})
                         //每次操作重新渲染
                         //处理sku
                         handleSku(model_info['sku']);
@@ -253,7 +245,7 @@
             handleTable(model_info['sku'])
         })
         //属性选择
-        $("select[name='mid']").change(function(){
+        $("select[name='goods[mid]']").change(function(){
             var id =$(this).val()
             $.post("{:url('getModelAttr')}",{id:id},function (result) {
                 var data = result.data;
@@ -290,7 +282,7 @@
                     html += '<select class="width-50" name="spu['+child.id+']"><option value="">{:lang("g_select")}</option>';
 
                     child['data'].map(function(ch_data,ch_d_index){
-                        html +='<option value="'+ch_data.value+'">'+ch_data.name+'</option>';
+                        html +='<option value="'+ch_data.name+'">'+ch_data.name+'</option>';
                     })
                     html += '</select>'
 
@@ -315,7 +307,7 @@
 
             data['child'].map(function(child,ch_index){
                 html +='<label>\n' +
-                    '   <input type="checkbox" name="sku['+child.id+']" '+(child.state==1?'checked':'')+' class="ace">\n' +
+                    '   <input type="checkbox" name="choose_sku['+data.id+']['+ch_index+']" value="'+child.attr+'" '+(child.state==1?'checked':'')+' class="ace">\n' +
                     '   <span class="lbl">'+child.attr+'</span>\n' +
                     '   </label>'
 
@@ -362,20 +354,20 @@
 
 
         result.map(function (child, index) {
-            tbody_html += '<tr><td width="3%"><label class="pos-rel"><input type="checkbox" class="ace"><span class="lbl"></span></label></td>';
+            tbody_html += '<tr><td width="3%"><label class="pos-rel"><input type="checkbox" name="sku[]" value="'+index+'" checked class="ace"><span class="lbl"></span></label></td>';
             for (var i = 0; i < child.length; i++) {
-                tbody_html += '<td>' + child[i].attr + '</td>';
+                tbody_html += '<td>' + child[i].attr + '<input type="hidden" name="attr['+index+']['+data[i].id+'_'+child[i].id+']" value="'+child[i].attr+'"></td>';
             }
             tbody_html += '' +
-                '<td><input type="text" class="width-50"></td>' +
-                '<td><input type="text" class="width-50"></td>' +
-                '<td><input type="text" class="width-50"></td>' +
-                '<td><input type="text" class="width-50"></td>' +
+                '<td><input type="text" name="code['+index+']" class="width-50"></td>' +
+                '<td><input type="text" name="bar_code['+index+']" class="width-50"></td>' +
+                '<td><input type="text" name="price['+index+']" class="width-50"></td>' +
+                '<td><input type="text" name="stock['+index+']" class="width-50"></td>' +
                 '</tr>\n';
         })
 
         html += '<td width="7%">{:c_lang($sys_master,"p_td_goods_code")}</td>' +
-            '<td width="7%">{:c_lang($sys_master,"p_td_goods_bar_code")}商品条码</td>' +
+            '<td width="7%">{:c_lang($sys_master,"p_td_goods_bar_code")}</td>' +
             '<td width="7%">{:c_lang($sys_master,"p_td_goods_price")}</td>' +
             '<td width="7%">{:c_lang($sys_master,"p_td_goods_stock")}</td>' +
             '</tr></thead>\n' + tbody_html + '</table>'

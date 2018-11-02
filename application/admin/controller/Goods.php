@@ -6,14 +6,26 @@ class Goods extends Shop
     //商品列表
     public function index()
     {
+        $list = model('Goods')->with(['linkPrice'])->paginate();
         return view('index',[
-            'list'=>[],
+            'list'=>$list,
         ]);
     }
 
     //商品-操作
     public function add()
     {
+        $id = $this->request->param('id',0,'intval');
+        $model = new \app\common\model\Goods();
+
+        //表单提交
+        if($this->request->isAjax()){
+            $input_data = $this->request->param();
+            $validate = new \app\common\validate\Goods();
+            $validate->scene(self::VALIDATE_SCENE);
+
+            return $model->actionAdd($input_data,$validate);
+        }
         //商品分类
         $cate_model = model('goodsCate');
         $cate_list = $cate_model
@@ -273,7 +285,8 @@ class Goods extends Shop
                             'attr' => $em,
                             'type'       => $vo['type']==1 ? 'enum' : 'auto',
                             'state' => 1,
-                            'id'    => $key
+                            'id'    => $key,
+                            'pid'    => $vo['id'],
                         ];
                     }
                 }
@@ -297,6 +310,7 @@ class Goods extends Shop
                 $child = [
                     'attr'   => $vo['name'],
                     'id'     => $vo['id'],
+                    'pid'    => $vo['id'],
                     'state'  => 1,
                     'type'   => $vo['type']==1 ? 'enum' : 'auto',
                     'data'   => $child,
