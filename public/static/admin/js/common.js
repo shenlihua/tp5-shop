@@ -27,7 +27,7 @@
                     if(handle_fnc) {
                         handle_fnc()
                     }else {
-                        setTimeout(function(){window.location.reload()},1000)
+                        // setTimeout(function(){window.location.reload()},1000)
                     }
                 }
             })

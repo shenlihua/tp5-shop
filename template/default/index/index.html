@@ -1,1 +1,161 @@
-123123123123
+{extend name="base"/}
+
+{block name="content"}
+    {include file="common/header"/}
+    <!--轮播图-->
+    <div class="layui-carousel" id="test1">
+        <div carousel-item>
+            <div><img src="/static/images/flow/2.jpg"/></div>
+            <div><img src="/static/images/flow/3.jpg"/></div>
+            <div><img src="/static/images/flow/4.jpg"/></div>
+        </div>
+    </div>
+
+    <!--广告块-->
+    <div class="layui-main layui-main-width main-content">
+        <div class="ad">
+            <a href="#"><img src="/static/images/s-02.png"/></a>
+            <a href="#"><img src="/static/images/s-03.png"/></a>
+            <div class="user-block">
+                <div class="user-header">
+                    <a href="###">
+                        <img src="/static/images/avatar.png"/>
+                    </a>
+                </div>
+                <div class="user-opt-btn">
+                    <a class="login">登录</a>
+                    <a class="reg">注册</a>
+                </div>
+                <div class="chip">
+                    <a href="#">
+                        <div>
+                            <span class="icon one"></span>
+                            <span>邀请登陆码</span>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div>
+                            <span class="icon two"></span>
+                            <span>区域查询</span>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div>
+                            <span class="icon three"></span>
+                            <span>防伪查询</span>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div>
+                            <span class="icon four"></span>
+                            <span>定制通道</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--产品-->
+        <div class="goods">
+            <h2 class="">
+                相关产品
+                <a class="more r f14 g9" href="###" target="_blank">更多</a>
+            </h2>
+            <div class="product">
+
+                <a class="four-item">
+                    <div class="pro-block">
+                        <div class="img">
+                            <img src="/static/images/goods/1.png" alt="">
+                        </div>
+                        <div class="intro">
+                            <div class="title">标题标题标题标题标题标题标题</div>
+                            <div class="price">￥199.99</div>
+
+                        </div>
+                    </div>
+                </a>
+                <a class="four-item">
+                    <div class="pro-block">
+                        <div class="img">
+                            <img src="/static/images/goods/2.png" alt="">
+                        </div>
+                        <div class="intro">
+                            <div class="title">标题标题标题标题标题标题标题</div>
+                            <div class="price">￥199.99</div>
+
+                        </div>
+                    </div>
+                </a>
+                <a class="four-item">
+                    <div class="pro-block">
+                        <div class="img">
+                            <img src="/static/images/goods/3.png" alt="">
+                        </div>
+                        <div class="intro">
+                            <div class="title">标题标题标题标题标题标题标题</div>
+                            <div class="price">￥199.99</div>
+
+                        </div>
+                    </div>
+                </a>
+                <a class="four-item">
+                    <div class="pro-block">
+                        <div class="img">
+                            <img src="/static/images/goods/4.png" alt="">
+                        </div>
+                        <div class="intro">
+                            <div class="title">标题标题标题标题标题标题标题</div>
+                            <div class="price">￥199.99</div>
+
+                        </div>
+                    </div>
+                </a>
+                <a class="four-item">
+                    <div class="pro-block">
+                        <div class="img">
+                            <img src="/static/images/goods/5.png" alt="">
+                        </div>
+                        <div class="intro">
+                            <div class="title">标题标题标题标题标题标题标题</div>
+                            <div class="price">￥199.99</div>
+
+                        </div>
+                    </div>
+                </a>
+                <a class="four-item">
+                    <div class="pro-block">
+                        <div class="img">
+                            <img src="/static/images/goods/6.png" alt="">
+                        </div>
+                        <div class="intro">
+                            <div class="title">标题标题标题标题标题标题标题</div>
+                            <div class="price">￥199.99</div>
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+
+
+{include file="common/footer"/}
+{/block}
+{block name="script"}
+<script>
+    layui.use('carousel', function(){
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+            ,arrow: 'hover' //始终显示箭头
+            ,indicator: 'none' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+    });
+</script>
+{/block}

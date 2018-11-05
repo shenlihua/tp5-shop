@@ -111,7 +111,7 @@ class Goods extends Shop
     public function brandDel()
     {
         $id = $this->request->param('id',0,'intval');
-        $model = new \app\common\model\GoodsCate();
+        $model = new \app\common\model\GoodsBrand();
         return $model->actionDel($id);
     }
 
