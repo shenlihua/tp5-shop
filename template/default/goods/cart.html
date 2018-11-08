@@ -1,0 +1,91 @@
+{extend name="base"/}
+
+{block name="content"}
+{include file="common/normal_header"/}
+
+<!--广告块-->
+<div class="layui-main layui-main-width main-content cart-info">
+
+    <table>
+        <thead>
+        <tr>
+            <th width="120"><input type="checkbox"/></th>
+            <th width="550">商品</th>
+            <th width="200">数量</th>
+            <th width="180">单价（元）</th>
+            <th width="200">金额</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td><input type="checkbox"/></td>
+            <td class="info">
+                <a href="##" class="img"><img src="#"/></a>
+                <a href="###" class="name">罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出</a>
+            </td>
+            <td class="num">
+                <div class="attr-num">
+                    <input class="reduce" value="-" type="button" mtype="dec" data-productid="691">
+                    <input type="text" name="product_691" value="0" mtype="amount" data-max="0" data-productid="691">
+                    <input class="add" value="+" type="button" mtype="inc" data-max="0" data-productid="691">
+                </div>
+            </td>
+            <td class="price">
+                ￥199.99
+            </td>
+            <td class="total">
+                ￥199.99
+            </td>
+        </tr>
+
+        <tr>
+            <td><input type="checkbox"/></td>
+            <td class="info">
+                <a href="##" class="img"><img src="#"/></a>
+                <a href="###" class="name">罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出</a>
+            </td>
+            <td class="num">
+                <div class="attr-num">
+                    <input class="reduce" value="-" type="button" mtype="dec" data-productid="691">
+                    <input type="text" name="product_691" value="0" mtype="amount" data-max="0" data-productid="691">
+                    <input class="add" value="+" type="button" mtype="inc" data-max="0" data-productid="691">
+                </div>
+            </td>
+            <td class="price">
+                ￥199.99
+            </td>
+            <td class="total">
+                ￥199.99
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input type="checkbox" id="goods-all"/>
+                <label for="goods-all">全选</label>
+            </td>
+            <td colspan="3" class="cart-info">
+                <span>已选择<em>3</em>件商品;总计<em><i>￥</i>199.99</em></span>
+            </td>
+            <td class="goods-sure"><button>结算</button></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+
+{include file="common/footer"/}
+{/block}
+{block name="script"}
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //…
+    });
+</script>
+{/block}

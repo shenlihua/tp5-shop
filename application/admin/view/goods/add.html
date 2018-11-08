@@ -64,7 +64,7 @@
 
                 <div class="col-sm-9">
                     <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_name')}" name="goods[name]"
-                           value="{$model['name']}" class="form-control" maxlength="20"/>
+                           value="{$model['name']}" class="form-control" maxlength="200"/>
                 </div>
             </div>
 
@@ -74,7 +74,7 @@
 
                 <div class="col-sm-9">
                     <input type="text" placeholder="{:c_lang($sys_master,'p_f_goods_subtitle')}" name="goods[subtitle]"
-                           value="{$model['subtitle']}" class="form-control" maxlength="20"/>
+                           value="{$model['subtitle']}" class="form-control" maxlength="200"/>
                 </div>
             </div>
 
@@ -182,7 +182,7 @@
     <table class="table center">
         <tbody>
         <tr>
-            <td>{:c_lang($sys_master,'p_f_goods_cate')}:</td>
+            <td id="sku-add-name">{:lang('g_name')}-<span></span></td>
             <td><input type="text"/></td>
         </tr>
         </tbody>
@@ -209,12 +209,14 @@
     $(function () {
         $("#sku").on('click','.add-sku',function(){
             var $this = $(this)
+            var sku_name = $(this).parent().find('label').text();
+            $("#sku-content #sku-add-name>span").text(sku_name)
             //索引
             var sku_index = $(this).parent().index()
             layer.open({
                 type:1,
                 btn:['确定','取消'],
-                title:'添加sku',
+                title:'add sku',
                 area:["300px","180px"],
                 content:$("#sku-content"),
                 yes:function(index, layero){

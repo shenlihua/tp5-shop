@@ -62,79 +62,21 @@
                 <a class="more r f14 g9" href="###" target="_blank">更多</a>
             </h2>
             <div class="product">
-
-                <a class="four-item">
+                {volist name="goods_list" id="vo"}
+                <a href="{:url('Goods/detail',['id'=>$vo['id']])}" class="four-item">
                     <div class="pro-block">
                         <div class="img">
-                            <img src="/static/images/goods/1.png" alt="">
+                            <img src="{:get_image_location($vo['cover_img'])}" alt="">
                         </div>
                         <div class="intro">
-                            <div class="title">标题标题标题标题标题标题标题</div>
-                            <div class="price">￥199.99</div>
+                            <div class="title">{$vo['name']}</div>
+                            <div class="price">￥{$vo['link_one_price']['price']}</div>
 
                         </div>
                     </div>
                 </a>
-                <a class="four-item">
-                    <div class="pro-block">
-                        <div class="img">
-                            <img src="/static/images/goods/2.png" alt="">
-                        </div>
-                        <div class="intro">
-                            <div class="title">标题标题标题标题标题标题标题</div>
-                            <div class="price">￥199.99</div>
+                {/volist}
 
-                        </div>
-                    </div>
-                </a>
-                <a class="four-item">
-                    <div class="pro-block">
-                        <div class="img">
-                            <img src="/static/images/goods/3.png" alt="">
-                        </div>
-                        <div class="intro">
-                            <div class="title">标题标题标题标题标题标题标题</div>
-                            <div class="price">￥199.99</div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="four-item">
-                    <div class="pro-block">
-                        <div class="img">
-                            <img src="/static/images/goods/4.png" alt="">
-                        </div>
-                        <div class="intro">
-                            <div class="title">标题标题标题标题标题标题标题</div>
-                            <div class="price">￥199.99</div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="four-item">
-                    <div class="pro-block">
-                        <div class="img">
-                            <img src="/static/images/goods/5.png" alt="">
-                        </div>
-                        <div class="intro">
-                            <div class="title">标题标题标题标题标题标题标题</div>
-                            <div class="price">￥199.99</div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="four-item">
-                    <div class="pro-block">
-                        <div class="img">
-                            <img src="/static/images/goods/6.png" alt="">
-                        </div>
-                        <div class="intro">
-                            <div class="title">标题标题标题标题标题标题标题</div>
-                            <div class="price">￥199.99</div>
-
-                        </div>
-                    </div>
-                </a>
             </div>
 
         </div>

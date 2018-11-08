@@ -10,4 +10,8 @@ class GoodsAttr extends BaseModel
 
     protected $name = 's_goods_attr';
 
+    public function linkModelAttr()
+    {
+        return $this->belongsTo('GoodsModelAttr','aid');
+    }
 }

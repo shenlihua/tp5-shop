@@ -72,6 +72,13 @@ class Goods extends Shop
         ]);
     }
 
+    //商品删除
+    public function goodsDel()
+    {
+        $id = $this->request->param('id',0,'intval');
+        $model = new \app\common\model\Goods();
+        return $model->actionDel($id);
+    }
 
     //品牌管理
     public function brand()
@@ -289,5 +296,22 @@ class Goods extends Shop
         list($sku,$spu,$stock) = $goods_model->goodsAttr($id,$gid);
 
         return ['code'=>1,'msg'=>'获取成功','data'=>['sku'=>$sku,'spu'=>$spu,'stock'=>$stock]];
+    }
+
+    //获取商品模型数据
+    public function modelAttrDel()
+    {
+        $id = $this->request->param('id',0,'intval');
+        $model = new \app\common\model\GoodsModelAttr();
+        return $model->actionDel($id);
+    }
+
+    //商品复制
+    public function goodsCopy()
+    {
+        $id = $this->request->param('id');
+        $model = new \app\common\model\Goods();
+        list($state,$msg,$model) = $model->goodsCopy($id);
+        return ['code'=>(int)$state,'msg'=>$msg];
     }
 }

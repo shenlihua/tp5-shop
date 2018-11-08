@@ -1,0 +1,192 @@
+{extend name="base"/}
+
+{block name="content"}
+{include file="common/normal_header" step="2"/}
+
+<!--广告块-->
+<div class="layui-main layui-main-width main-content order-info">
+    <div class="layui-card">
+        <div class="layui-card-header card-header ">收货人信息</div>
+        <div class="layui-card-body card-body-flex">
+            <div class="layui-box">
+                <div class="layui-text name">用户名</div>
+                <div class="layui-text phone">18702783614</div>
+                <div class="layui-text addr">安徽 蚌埠 东市区   xxx</div>
+                <div class="choose-info">
+                    <a href="#" class="del">删除</a>
+                    <a href="#" class="modify">修改</a>
+                </div>
+            </div>
+            <div class="layui-box active">
+                <i class="layui-icon layui-icon-ok-circle"></i>
+                <div class="layui-text name">用户名</div>
+                <div class="layui-text phone">18702783614</div>
+                <div class="layui-text addr">安徽 蚌埠 东市区   xxx</div>
+                <div class="choose-info">
+                    <a href="#" class="del">删除</a>
+                    <a href="#" class="modify">修改</a>
+                </div>
+            </div>
+            <div class="layui-box">
+                <div class="layui-text name">用户名</div>
+                <div class="layui-text phone">18702783614</div>
+                <div class="layui-text addr">安徽 蚌埠 东市区   xxx</div>
+                <div class="choose-info">
+                    <a href="#" class="del">删除</a>
+                    <a href="#" class="modify">修改</a>
+                </div>
+            </div>
+            <div class="layui-box">
+                <div class="layui-text name">用户名</div>
+                <div class="layui-text phone">18702783614</div>
+                <div class="layui-text addr">安徽 蚌埠 东市区   xxx</div>
+                <div class="choose-info">
+                    <a href="#" class="del">删除</a>
+                    <a href="#" class="modify">修改</a>
+                </div>
+            </div>
+            <div class="layui-box">
+                <div class="layui-text name">用户名</div>
+                <div class="layui-text phone">18702783614</div>
+                <div class="layui-text addr">安徽 蚌埠 东市区   xxx</div>
+                <div class="choose-info">
+                    <a href="#" class="del">删除</a>
+                    <a href="#" class="modify">修改</a>
+                </div>
+            </div>
+            <div class="layui-box">
+                <div class="layui-text name">用户名</div>
+                <div class="layui-text phone">18702783614</div>
+                <div class="layui-text addr">安徽 蚌埠 东市区   xxx</div>
+                <div class="choose-info">
+                    <a href="#" class="del">删除</a>
+                    <a href="#" class="modify">修改</a>
+                </div>
+            </div>
+            <div class="layui-box add-addr">
+                <i class="layui-icon layui-icon-location"></i>
+                <a href="###">添加新地址</a>
+            </div>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-header card-header">支付方式</div>
+        <div class="layui-card-body pay-style">
+            <ul>
+                <li><a class="active" href="##"><img src="/static/images/paywx_03.jpg"/></a></li>
+                <li><a href="##"><img src="/static/images/payzfb_03.jpg"/></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-header card-header">商品信息</div>
+        <div class="layui-card-body goods-item">
+            <div class="goods-info">
+
+                <div class="goods">
+                    <a href="##">
+                        <img src="####" alt=""/>
+                        <span class="name">
+                            罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出
+                        </span>
+                    </a>
+                    <div class="attr">
+                        <span class="prop">【白色】【白色】【白色】【白色】【白色】【白色】</span>
+                        <span class="price">￥199.99</span>
+                        <span class="num">1</span>
+                        <span class="total">￥199.99</span>
+
+                    </div>
+                </div>
+                <div class="goods">
+                    <a href="##">
+                        <img src="####" alt=""/>
+                        <span class="name">
+                            罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出
+                        </span>
+                    </a>
+                    <div class="attr">
+                        <span class="prop">【白色】【白色】【白色】【白色】【白色】【白色】</span>
+                        <span class="price">￥199.99</span>
+                        <span class="num">1</span>
+                        <span class="total">￥199.99</span>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-header card-header">发票信息</div>
+        <div class="layui-card-body invoice">
+            <div class="intro">
+                <span>发票类型</span>
+                <span>发票说明</span>
+            </div>
+            <a href="#">修改</a>
+        </div>
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-body result">
+            <div class="remark">
+                <textarea rows="10" placeholder="订单备注 限200字" maxlength="200"></textarea>
+            </div>
+            <div class="result-info">
+                <table class="layui-table" lay-size="lg">
+                    <colgroup>
+                        <col width="150">
+                        <col width="200">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td>购买数量</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>运费</td>
+                        <td>0.00</td>
+                    </tr>
+                    <tr>
+                        <td>应付金额</td>
+                        <td>￥199.99</td>
+                    </tr>
+                    <tr>
+                        <td>优惠抵扣</td>
+                        <td>￥99.99</td>
+                    </tr>
+                    <tr>
+                        <td>实付总额</td>
+                        <td>￥199.99</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-body order-sure">
+            <button>提交订单</button>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+{include file="common/footer"/}
+{/block}
+{block name="script"}
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //…
+    });
+</script>
+{/block}

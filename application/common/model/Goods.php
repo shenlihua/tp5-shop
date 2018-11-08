@@ -397,12 +397,74 @@ class Goods extends BaseModel
         return [$sku, array_values($spu),$goods_stock_info];
     }
 
+    /*
+     * 商品复制
+     * */
+    public function goodsCopy($id)
+    {
+        try{
+            $goods_info = $this->with(['linkAttr'=>function($query){
+                $query->field('aid,gid,val,id as old_id');
+            },'linkPrice'])->where('id','=',$id)->find()->toArray();
 
+            $goods_attr =$goods_attr_new_key = $goods_price = [];
+//        $goods_attr = $goods_info;
+//
+            unset($goods_info['id'],$goods_info['create_time'],$goods_info['update_time']);
+//            dump($goods_info);exit;
+            $this->startTrans();
+            $goods_model = $this->newInstance();
+            $goods_model->save($goods_info);
+//            dump($goods_model);exit;
+//            $new_goods_id = $goods_model->id;
+            //入库属性
+            $attr_data = $goods_model->linkAttr()->saveAll($goods_info['link_attr']);
+            foreach($attr_data as $vo) {
+                $goods_attr_new_key[$vo['old_id']] = $vo['id'];
+            }
+
+            foreach($goods_info['link_price'] as $vo) {
+                $attr_info =[];
+                foreach ($vo['attr_info'] as $attr){
+                    $attr_info[] = isset($goods_attr_new_key[$attr])?$goods_attr_new_key[$attr]:'';
+                }
+                $vo['attr_info'] = implode('|',$attr_info);
+                unset($vo['id']);
+                $goods_price[] = $vo;
+            }
+//            dump($goods_price);exit;
+            //入库价格
+            $goods_model->linkPrice()->saveAll($goods_price);
+            $this->commit();
+            return [true, lang('g_copy_success'),$goods_model];
+        }catch (\Exception $e) {
+            $this->rollback();
+            return [false,lang('g_copy_error').':'.$e->getMessage()];
+        }
+    }
+
+
+    //查询商品价格信息
+    public function handleOrderData()
+    {
+        //属性信息
+        $attr_info = $this->link_one_price['attr_info'];
+        $attr_model = model('GoodsAttr');
+        return $this->link_one_price['attr_info_name'] = $attr_model->whereIn('id',$attr_info)->column('val');
+    }
+
+    //关联商品价格属性--一个属性
+    public function linkOnePrice()
+    {
+        return $this->hasOne('GoodsAttrPrice','gid');
+    }
+    //关联商品价格属性
     public function linkPrice()
     {
         return $this->hasMany('GoodsAttrPrice','gid');
     }
 
+    //关联商品属性
     public function linkAttr()
     {
         return $this->hasMany('GoodsAttr','gid');

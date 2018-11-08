@@ -9,70 +9,60 @@
 
     <!--产品 详情-->
     <div class="goods-detail">
-        <div class="img">
-            <img src="#"/>
+        <div class="goods-img">
+            <div class="img">
+                <img src="{:get_image_location($goods_info['cover_img'])}" alt="{$goods_info['name']}">
+            </div>
         </div>
-        <div class="produce-info">
-            <div class="goods-name">
-                商品名称
-            </div>
-            <div class="goods-price">
-                <span class="title">销售价格</span>
-                <i>￥</i>
-                <strong>199.99</strong>
-            </div>
-            <div class="goods-info">
-                <div class="line">
-                    <div class="title">配送</div>
-                    <div class="info">
-                        <select name="" id="">
-                            <option value="1">请选择</option>
-                        </select>
-                        <strong>有货</strong>
-                        <div class="number">
-                            <div class="sold">成交 <strong>0</strong></div>
-                            <div class="stock">库存 <strong>0</strong></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="line">
-                    <div class="title">运费</div>
-                    <div class="info">单笔满500元的订单国内可包邮</div>
-                </div>
-            </div>
-            <div class="goods-attr">
-                <div class="title">规格</div>
-                <div class="prop">
-                    <div class="list">
-                        <div class="photo"><img src="#"/> </div>
-                        <div class="attr">属性名</div>
-                        <div class="price">199.99元</div>
-                        <div class="number">0</div>
-                        <div class="attr-num">
-                            <input class="reduce" value="-" type="button" mtype="dec" data-productid="691">
-                            <input type="text" name="product_691" value="0" mtype="amount" data-max="0" data-productid="691">
-                            <input class="add" value="+" type="button" mtype="inc" data-max="0" data-productid="691">
-                        </div>
-                    </div>
+        <div class="goods-info">
+            <div class="goods-name">{$goods_info['name']}</div>
+            <div class="sold-info">
+                <div class="info">
+                    <span class="ship">商城价</span>
+                    <em class="price">￥0.00</em>
 
-                    <div class="list">
-                        <div class="photo"><img src="#"/> </div>
-                        <div class="attr">属性名</div>
-                        <div class="price">199.99元</div>
-                        <div class="number">0</div>
-                        <div class="attr-num">
-                            <input class="reduce" value="-" type="button" mtype="dec" data-productid="691">
-                            <input type="text" name="product_691" value="0" mtype="amount" data-max="0" data-productid="691">
-                            <input class="add" value="+" type="button" mtype="inc" data-max="0" data-productid="691">
+                </div>
+                <div class="num">
+                    <em class="view-num">0</em>
+                    <em class="sold-num">0</em>
+                </div>
+            </div>
+            <div class="info-item">
+                {volist name="property" id="vo"}
+                <div class="item">
+                    <div class="ship">{$vo['name']}</div>
+                    <div class="content">
+                        <ul>
+                            {volist name="vo['data']"  id="prop"}
+                            <li class="" data-attr_id="{$prop['id']}"><a href="##"  ><b></b>{$prop['name']}</a></li>
+                            {/volist}
+
+                        </ul>
+                    </div>
+                </div>
+                {/volist}
+                <div class="item">
+                    <div class="ship">数量</div>
+                    <div class="content">
+                        <div class="amount-warp">
+                            <input class="text buy-num" ectype="quantity" onblur="changePrice()" value="0" name="number" defaultnumber="1">
+                            <div class="a-btn">
+                                <a href="javascript:void(0);" class="btn-add"><i class="layui-icon layui-icon-up"></i></a>
+                                <a href="javascript:void(0);" class="btn-reduce btn-disabled"><i class="layui-icon layui-icon-down"></i></a>
+                                <input type="hidden" ectype="perNumber" value="1000">
+                                <input type="hidden" ectype="perMinNumber" value="1">
+                            </div>
+                            <input name="confirm_type" id="confirm_type" type="hidden" value="3">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="goods-opt">
-                <button class="join-cart">加入购物车</button>
-                <button class="buy">立即购买</button>
+            <div class="goods-btn">
+                <button type="button" class="buy">立即购买</button>
+                <button type="button" class="cart"><i class="layui-icon layui-icon-cart"></i>加入购物车</button>
             </div>
         </div>
+
     </div>
 
     <div class="goods-coll">
@@ -129,11 +119,65 @@
 {/block}
 {block name="script"}
 <script>
-    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
-    layui.use('element', function(){
-        var element = layui.element;
+    //属性集合
+    var goods_attr = '{:json_encode($goods_info["link_price"],true)}';
+    goods_attr = JSON.parse(goods_attr)
+    var attr_k_v={};
+    //选择的属性
+    var attr_id=0;
+    $(function(){
+        $(".info-item ul li a").click(function(){
+            if(!$(this).parent().hasClass('active')) {
+                $(this).parent().parent().find('li.active').removeClass('active')
+                $(this).parent().addClass('active')
+            }
+        })
 
-        //…
-    });
+        $(".goods-info .goods-btn .buy").click(function(){
+            var attr=[];
+            $(".info-item ul li.active").each(function(index){
+                attr.push($(this).data('attr_id'))
+            })
+            attr = attr.sort()
+            var group = attr.join('|')
+            // get_attr_id(group)
+            window.location.href="{:url('order',['gid'=>$goods_info['id']],false,false)}/attr_id/"+get_attr_id(group)
+        })
+
+
+
+    })
+
+    handle_price(58)
+
+    function handle_price(index) {
+        var index = index?index:0;
+        var data;
+        for(var i=0;i<goods_attr.length;i++) {
+            if(goods_attr[i].id==index){
+                console.log(goods_attr[i])
+                data = goods_attr[i]
+            }
+            var attr_info = goods_attr[i].attr_info;
+            attr_info = attr_info.sort()
+            attr_info = attr_info.join('|')
+            attr_k_v[attr_info] = goods_attr[i].id
+        }
+
+        if(!data) {
+            data = goods_attr[0];
+        }
+
+        attr_id = data.id
+        data.attr_info.map(function(value,index){
+            $(".info-item ul [data-attr_id='"+value+"']").addClass('active')
+        })
+    }
+
+    //获取选择的属性
+    function get_attr_id(group)
+    {
+        return attr_k_v[group]
+    }
 </script>
 {/block}

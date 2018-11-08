@@ -47,6 +47,9 @@ return [
     'g_del'                 => '删除',
     'g_select'              => '请选择',
     'g_auto'                => '自定义',
+    'g_goods_copy'          => '复制',
+    'g_copy_success'        => '复制成功',
+    'g_copy_error'          => '复制失败',
 
     //文件上传
     'g_upload_file'         => '文件上传',
@@ -337,7 +340,8 @@ return [
     ],
     'shop'   => [
         'n_goods'         => '商品',
-        'n_n_goods'                         =>  '商品管理',
+        'n_n_goods'                     =>  '商品管理',
+        'p_t_goods_copy'                =>  '是否复制该商品',
         'p_td_goods_name'               =>  '商品名称',
         'p_td_goods_label'              =>  '商品标签',
         'p_td_goods_sku'                =>  'sku/库存',
