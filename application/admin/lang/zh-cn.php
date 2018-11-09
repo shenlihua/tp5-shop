@@ -50,6 +50,9 @@ return [
     'g_goods_copy'          => '复制',
     'g_copy_success'        => '复制成功',
     'g_copy_error'          => '复制失败',
+    'g_pay'                 =>  '支付',
+    'g_pay_wechat'          =>  '微信',
+    'g_pay_alipay'          =>  '支付宝',
 
     //文件上传
     'g_upload_file'         => '文件上传',
@@ -165,7 +168,23 @@ return [
     /*商品管理结束*/
     /*shop end*/
 
+    /*订单管理开始*/
+    'c_order'               =>  '订单管理',
+    'c_order_index'         =>  '订单列表',
 
+    'f_order_is_auth_no'    =>  '未审核',
+    'f_order_is_auth_yes'   =>  '已审核',
+    'f_order_is_auth_refund'=>  '审核被拒',
+
+    'f_order_is_pay_no'     =>  '未支付',
+    'f_order_is_pay_yes'    =>  '已支付',
+
+    'f_order_is_send_no'    =>  '未发货',
+    'f_order_is_send_yes'   =>  '已发货',
+
+
+
+    /*订单管理结束*/
 
     //全局table
     'g_td_number'       => '序号',
@@ -174,7 +193,13 @@ return [
     'g_td_update_time'  => '更新时间',
     'g_td_delete_time'  => '删除时间',
     'g_td_name'         => '名称',
+    'g_td_detail'       =>  '详情',
 
+    //订单状态按钮
+    'g_b_order_all'          =>  '全部订单',
+    'g_b_order_wait_pay'     =>  '等待付款',
+    'g_b_order_wait_auth'    =>  '等待审核',
+    'g_b_order_wait_send'    =>  '代发货',
 
     //增加操作
     'g_add' =>[
@@ -423,6 +448,21 @@ return [
 
         'n_sales'         => '促销',
         'n_order'         => '订单',
+            'n_n_order'                 =>  '订单列表',
+
+                'p_td_order_no'        =>  '订单编号',
+                'p_td_order_user_name' =>  '客户名称',
+                'p_td_order_receive_name'=>  '收货人',
+                'p_td_order_pay_info'   =>  '支付信息',
+                'p_td_order_status'     =>  '订单状态',
+                'p_td_order_create_time'=>  '订单创建时间',
+                'p_td_order_pay_way'    =>  '支付方式',
+                'p_td_order_total_money'=>  '应付金额',
+                'p_td_order_pay_money'  =>  '实付金额',
+                'p_td_order_dis_money'  =>  '优惠金额',
+
+            'n_n_order_refund'          =>  '退款订单',
+            'n_n_refund_goods'          =>  '退货单',
         'n_cargo_shop'    => '铺货',
     ]
 ];

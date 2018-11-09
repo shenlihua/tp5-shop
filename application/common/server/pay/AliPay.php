@@ -22,7 +22,7 @@ class AliPay  implements IPay
     public $notify_url;
 
     //超时时间
-    private $timeout_express = '30m';
+    private $timeout_express;
 
     protected $aop;
 
@@ -156,9 +156,20 @@ class AliPay  implements IPay
         }
     }
 
+    //设置回调地址
     public function setNotifyUrl($url)
     {
         $this->notify_url = $url;
+    }
+
+    /*
+     * 设置订单有效期该笔订单允许的最晚付款时间，逾期将关闭交易。
+     * 取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。
+     *  该参数数值不接受小数点， 如 1.5h，可转换为 90m。注：若为空，则默认为15d。
+     * */
+    public function setOrderExpress($second)
+    {
+        $this->timeout_express = intval($second/60).'m';
     }
 
     //接收通知后关闭回调支付宝信息

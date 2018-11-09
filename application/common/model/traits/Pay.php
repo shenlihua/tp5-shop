@@ -47,8 +47,6 @@ trait Pay{
             'body'          => $this->getOrderBody(),
             'no'            => $this->getOrderNo(),
             'money'         => $this->getOrderMoney(),
-            'start_time'    => time(),
-            'expire_time'   => time()+600,
             'tag'           =>  'goods',
         ];
     }

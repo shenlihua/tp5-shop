@@ -1,0 +1,98 @@
+{extend name="base"/}
+<!--上级栏目-->
+{block name="slider_bar"}order-index{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_order')}</li>
+<li>{:lang('c_order_index')}</li>
+{/block}
+
+
+{block name="content"}
+
+
+<!-- div.table-responsive -->
+
+<!-- div.dataTables_borderWrap -->
+<div class="dataTables_wrapper form-inline no-footer">
+    <div class="row">
+        <div class="col-xs-6 btn-group btn-corner">
+            {volist name="btn_order_status" id="vo"}
+                <a href="{:url('',['order_state'=>$key])}" class="btn {:$order_state==$key?'btn-info':''}" type="button">{:c_lang($vo)}</a>
+            {/volist}
+        </div>
+        <div class="col-xs-5 text-right">
+
+        </div>
+        <div class="col-xs-1">
+
+        </div>
+    </div>
+    <table id="simple-table" class="table  table-bordered table-hover">
+        <thead>
+        <tr>
+            <th width="80">{:lang('g_td_number')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_order_no')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_order_user_name')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_order_receive_name')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_order_pay_info')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_order_status')}</th>
+            <th width="120">{:c_lang($sys_master,'p_td_order_create_time')}</th>
+            <th width="80">{:lang('g_td_opt')}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {volist name="list" id="vo"}
+        <tr>
+            <td>{:$i}</td>
+            <td>{$vo['no']}</td>
+            <td> </td>
+            <td>
+                <div>{:$vo['rec_name'].' [TEL:'.$vo['rec_phone'].']'} </div>
+                <div>[{:$vo['province'].' '.$vo['city'].' '.$vo['area']}] {$vo['addr']} </div>
+            </td>
+            <td>
+                <div>{:c_lang($sys_master,'p_td_order_pay_way')}：{:lang($pay_way[$vo['pay_id']]['lang'])}</div>
+                <div>{:c_lang($sys_master,'p_td_order_total_money')}：{$vo['total_money']}</div>
+                <div>{:c_lang($sys_master,'p_td_order_dis_money')}：{$vo['dis_money']}</div>
+                <div>{:c_lang($sys_master,'p_td_order_pay_money')}：{$vo['pay_money']}</div>
+            </td>
+            <td>{:lang($vo::$fields_is_auth[$vo['is_auth']]).' '.lang($vo::$fields_is_pay[$vo['pay_status']]).' '.lang($vo::$fields_is_send[$vo['is_send']])}</td>
+            <td>{:$vo['create_time']}</td>
+            <td>
+                <a href="{:url('detail',['id'=>$vo['id']])}">{:lang('g_td_detail')}</a>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+{$page|raw}
+
+{/block}
+
+{block name="script"}
+<script>
+    //And for the first simple table, which doesn't have TableTools or dataTables
+    //select/deselect all rows according to table header checkbox
+    $('.show-details-btn').on('click', function(e) {
+        e.preventDefault();
+        $(this).closest('tr').next().toggleClass('open');
+        $(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+    });
+
+    $(".goods-copy").click(function(){
+        var id = $(this).data('id');
+        layer.confirm("{:c_lang($sys_master, 'p_t_goods_copy')}",function(){
+            $.post("{:url('goodsCopy')}",{id:id},function(result){
+                layer.msg(result.msg)
+                if(result.code==1){
+                    setTimeout(function(){window.location.reload()},1000)
+                }
+            })
+        })
+    })
+</script>
+{/block}

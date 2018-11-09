@@ -11,7 +11,8 @@ class Wechat implements IPay
     const NAME = 'wechat';
 
     protected $notify_url;
-
+    //订单有效时长
+    protected $valid_time;
     //微信配置信息
     protected $config;
 
@@ -60,14 +61,15 @@ class Wechat implements IPay
         }
         //微信配置
 //        $config = new WxPayConfig();
+        $start_time = time();
 
         $input->SetNotify_url($this->notify_url);       //回调地址
         $input->SetProduct_id('wechat_pay');           //此参数为二维码中包含的商品ID，商户自行定义。
 
         $input->SetOut_trade_no($pay_info['no']);
         $input->SetTotal_fee($pay_info['money']*100);
-        $input->SetTime_start(date("YmdHis",$pay_info['start_time']));
-        $input->SetTime_expire(date("YmdHis", $pay_info['expire_time']));
+        $input->SetTime_start(date("YmdHis",$start_time));
+        $input->SetTime_expire(date("YmdHis", $start_time+$this->valid_time));
         $input->SetGoods_tag($pay_info['tag']);
 
         $result = \WxPayApi::$pay_mode($this->config, $input);
@@ -140,6 +142,11 @@ class Wechat implements IPay
     public function setNotifyUrl($url)
     {
         $this->notify_url = $url;
+    }
+    //设置订单有效期
+    public function setOrderExpress($second)
+    {
+        $this->valid_time = $second;
     }
 
     //返回通知结果

@@ -28,6 +28,7 @@ class Goods extends Shop
 
         return view('index',[
             'list'=>$list,
+            'page'  => $list->render()
         ]);
     }
 

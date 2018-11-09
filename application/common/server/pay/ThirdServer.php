@@ -18,12 +18,13 @@ class ThirdServer
 
 
 
-    protected static $pay_class =[
+    public static $pay_class =[
         [],
         //微信支付
         [
-            'key'=>'wechat',
-            'name'=>'wechat',
+            'key' => 'wechat',
+            'name' => '微信',
+            'lang' => 'g_pay_wechat',
             'class'=>'\app\common\server\pay\Wechat',
             'config'=>[
                 //键的值仅供测试使用
@@ -36,7 +37,8 @@ class ThirdServer
         //支付宝
         [
             'key'=>'alipay',
-            'name'=>'alipay',
+            'name' => '支付宝',
+            'lang' => 'g_pay_alipay',
             'class'=>'\app\common\server\pay\AliPay',
             'config'=>[
                 'gateway_url'   =>  'https://openapi.alipay.com/gateway.do',
@@ -65,7 +67,10 @@ class ThirdServer
         $obj_class_name = class_basename($opt_obj);
         $notify_url = url('Index/Order/notify',['order_id'=>$opt_obj->primaryKeyValue(),'model'=>$obj_class_name],false,true);
 //        dump($notify_url);exit;
+        //设置通知地址
         $this->third_server->setNotifyUrl($notify_url);
+        //设置订单有效时长
+        $this->third_server->setOrderExpress(1800);
         //支付操作
 
         $result = $this->third_server->pay($opt_obj,$pay_mode);

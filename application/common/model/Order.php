@@ -15,6 +15,14 @@ class Order extends BaseModel
     //新增入库操作
     protected $insert = ['no','receive_addr'];
 
+    //订单状态
+    public static $btn_order_status = ['g_b_order_all','g_b_order_wait_pay','g_b_order_wait_auth','g_b_order_wait_send'];
+    //订单审核状态
+    public static $fields_is_auth =['f_order_is_auth_no','f_order_is_auth_yes','f_order_is_auth_refund'];
+    //订单支付状态
+    public static $fields_is_pay =['f_order_is_pay_no','f_order_is_pay_yes'];
+    //订单支付发货
+    public static $fields_is_send =['f_order_is_send_no','f_order_is_send_yes'];
 
     //设置订单编号
     public function setNoAttr($value)
