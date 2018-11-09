@@ -2,6 +2,7 @@
 
 namespace app\common\model;
 
+use think\model\Collection;
 use think\model\concern\SoftDelete;
 use think\Validate;
 
@@ -452,6 +453,40 @@ class Goods extends BaseModel
         $attr_model = model('GoodsAttr');
         return $this->link_one_price['attr_info_name'] = $attr_model->whereIn('id',$attr_info)->column('val');
     }
+
+    /*
+     * 商品价格信息处理
+     * @param $goods_model collection
+     * @param $goods_num array
+     * return array
+     * */
+    public function handlePayInfo(Collection $goods_model,array $goods_num=[])
+    {
+        //商品-支付信息
+        $number = $total_money = $pay_money = $dis_money = $freight_money = 0;
+
+        if ( $goods_model->count()>0 ) {
+            foreach ($goods_model as $key=>$item) {
+                $item['number'] = empty($goods_num[$item['id']])?1:$goods_num[$item['id']]; //购买数量
+                $number +=$item['number']; //总数量
+                $item['total_price'] = $item['number']*$item['link_one_price']['price']; //总价格
+                $total_money += $item['total_price'];
+
+                $item->handleOrderData();
+            }
+        }
+
+        $pay_money = $total_money;
+
+        return array(
+            $number,
+            $total_money,
+            $pay_money,
+            $dis_money,
+            $freight_money
+        );
+    }
+
 
     //关联商品价格属性--一个属性
     public function linkOnePrice()

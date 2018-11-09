@@ -125,6 +125,8 @@
     var attr_k_v={};
     //选择的属性
     var attr_id=0;
+    //商品选中的属性
+    var choose_attr_info={};
     $(function(){
         $(".info-item ul li a").click(function(){
             if(!$(this).parent().hasClass('active')) {
@@ -148,9 +150,9 @@
 
     })
 
-    handle_price(58)
+    init_data()
 
-    function handle_price(index) {
+    function init_data(index) {
         var index = index?index:0;
         var data;
         for(var i=0;i<goods_attr.length;i++) {
@@ -167,12 +169,21 @@
         if(!data) {
             data = goods_attr[0];
         }
+        choose_attr_info = data;
 
-        attr_id = data.id
-        data.attr_info.map(function(value,index){
+        handle_price()
+    }
+
+    //处理商品价格
+    function handle_price()
+    {
+        //处理价格
+        $(".sold-info .info .price").text('￥'+choose_attr_info.price)
+        choose_attr_info.attr_info.map(function(value,index){
             $(".info-item ul [data-attr_id='"+value+"']").addClass('active')
         })
     }
+
 
     //获取选择的属性
     function get_attr_id(group)

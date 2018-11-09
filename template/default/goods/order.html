@@ -5,9 +5,11 @@
 
 <!--广告块-->
 <div class="layui-main layui-main-width main-content order-info">
+    <form action="{:url('Order/create')}" method="post">
     <div class="layui-card">
         <div class="layui-card-header card-header ">收货人信息</div>
         <div class="layui-card-body card-body-flex">
+            <input type="hidden" name="addr_id" value="99"/>
             <div class="layui-box">
                 <div class="layui-text name">用户名</div>
                 <div class="layui-text phone">18702783614</div>
@@ -72,6 +74,7 @@
     <div class="layui-card">
         <div class="layui-card-header card-header">支付方式</div>
         <div class="layui-card-body pay-style">
+            <input type="hidden" name="pay_id" value="1"/>
             <ul>
                 <li><a class="active" href="##"><img src="/static/images/paywx_03.jpg"/></a></li>
                 <li><a href="##"><img src="/static/images/payzfb_03.jpg"/></a></li>
@@ -83,37 +86,27 @@
         <div class="layui-card-body goods-item">
             <div class="goods-info">
 
-                <div class="goods">
-                    <a href="##">
-                        <img src="####" alt=""/>
-                        <span class="name">
-                            罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出
-                        </span>
-                    </a>
-                    <div class="attr">
-                        <span class="prop">【白色】【白色】【白色】【白色】【白色】【白色】</span>
-                        <span class="price">￥199.99</span>
-                        <span class="num">1</span>
-                        <span class="total">￥199.99</span>
+                {volist name="goods_list" id="vo"}
+                    <div class="goods">
 
+                        <a href="##">
+                            <img src="{:get_image_location($vo['cover_img'])}" alt=""/>
+                            <span class="name">
+                                {$vo['name']}
+                            </span>
+                        </a>
+                        <div class="attr">
+                            <span class="prop">{:implode("|",$vo['link_one_price']['attr_info_name'])}</span>
+                            <span class="price">￥{$vo['link_one_price']['price']}</span>
+                            <span class="num">{$vo['number']}</span>
+                            <span class="total">￥{$vo['total_price']}</span>
+
+                        </div>
                     </div>
-                </div>
-                <div class="goods">
-                    <a href="##">
-                        <img src="####" alt=""/>
-                        <span class="name">
-                            罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出
-                        </span>
-                    </a>
-                    <div class="attr">
-                        <span class="prop">【白色】【白色】【白色】【白色】【白色】【白色】</span>
-                        <span class="price">￥199.99</span>
-                        <span class="num">1</span>
-                        <span class="total">￥199.99</span>
-
-                    </div>
-                </div>
-
+                <input type="hidden" name="goods_info[{$key}][gid]" value="{$vo['id']}"/>
+                <input type="hidden" name="goods_info[{$key}][attr_id]" value="{$vo['link_one_price']['id']}"/>
+                <input type="hidden" name="goods_info[{$key}][num]" value="{$vo['number']}"/>
+                {/volist}
 
             </div>
         </div>
@@ -143,23 +136,23 @@
                     <tbody>
                     <tr>
                         <td>购买数量</td>
-                        <td>2</td>
+                        <td>{$number}</td>
                     </tr>
                     <tr>
                         <td>运费</td>
-                        <td>0.00</td>
+                        <td>{$freight_money}</td>
                     </tr>
                     <tr>
                         <td>应付金额</td>
-                        <td>￥199.99</td>
+                        <td>￥{$total_money}</td>
                     </tr>
                     <tr>
                         <td>优惠抵扣</td>
-                        <td>￥99.99</td>
+                        <td>￥{$dis_money}</td>
                     </tr>
                     <tr>
                         <td>实付总额</td>
-                        <td>￥199.99</td>
+                        <td>￥{$pay_money}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -173,7 +166,7 @@
         </div>
     </div>
 
-
+    </form>
 </div>
 
 

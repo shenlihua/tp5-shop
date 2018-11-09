@@ -7,15 +7,15 @@
 <div class="layui-main layui-main-width main-content ">
     <div class="pay-info">
         <div class="order-info">
-            <div class="tip">订单提交成功，请尽快付款。订单编号： <em>2018110615345019267</em></div>
-            <div class="money">金额： <em class="money">￥199.99</em></div>
+            <div class="tip">订单提交成功，请尽快付款。订单编号： <em>{$order_model['no']}</em></div>
+            <div class="money">金额： <em class="money">￥{$order_model['pay_money']}</em></div>
         </div>
         <div class="pay-style">
             微信支付
         </div>
         <div class="pay-code">
             <div class="qr-code">
-                <img src="/" alt=""/>
+                <img src="{:url('Index/qrcode',['content'=>$code_url])}" alt=""/>
             </div>
             <div class="tip-msg">
                 请使用 <em>微信</em> 扫一扫
@@ -33,11 +33,6 @@
 {/block}
 {block name="script"}
 <script>
-    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
-    layui.use('element', function(){
-        var element = layui.element;
 
-        //…
-    });
 </script>
 {/block}

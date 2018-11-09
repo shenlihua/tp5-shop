@@ -79,3 +79,14 @@ function get_image_location($img='')
     }
 //    return $img;
 }
+
+
+//生成二维码
+function generateQrCode()
+{
+    $qrCode = new \Endroid\QrCode\QrCode('Life is too short to be generating QR codes');
+
+    header('Content-Type: '.$qrCode->getContentType());
+    echo $qrCode->writeString();
+
+}

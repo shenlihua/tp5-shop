@@ -67,17 +67,21 @@ class Goods extends Common
         $gid = $this->request->param('gid',0,'intval');
         $attr_id =$this->request->param('attr_id',0,'intval');
         $goods_model = new \app\common\model\Goods();
-        $data = $goods_model->with(['linkOnePrice'=>function($query)use($attr_id){
-            $query->where('id','=',$attr_id);
-        }])->where('id','=',$gid)->select()->each(function($item,$key){
-            //处理订单数据
-            $item->handleOrderData();
-        });
 
-        dump($data);exit;
+        $goods = $goods_model->with(['linkOnePrice'=>function($query)use($attr_id){
+            $query->where('id','=',$attr_id);
+        }])->where('id','=',$gid)->select();
+        //获取商品数据
+        list($number,$total_money,$pay_money,$dis_money,$freight_money) = $goods_model->handlePayInfo($goods);
+
 
         return view('order',[
-
+            'number' => $number,
+            'total_money' => $total_money,
+            'pay_money'  => $pay_money,
+            'dis_money'  => $dis_money,
+            'freight_money'  => $freight_money, //运费
+            'goods_list' => $goods
         ]);
     }
 
