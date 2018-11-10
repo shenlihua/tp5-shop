@@ -144,7 +144,7 @@ class Order extends BaseModel
     //商品
     public function linkGoods()
     {
-        $fields = 'id,oid,gid,g_name,g_price,g_number,g_img,g_attr,is_send';
+        $fields = 'id,oid,gid,g_name,g_price,g_number,g_img,g_attr,is_send,total_price';
         return $this->hasMany('OrderGoods','oid')->field($fields);
     }
 

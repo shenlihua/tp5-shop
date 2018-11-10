@@ -59,7 +59,7 @@
                 <div>{:c_lang($sys_master,'p_td_order_dis_money')}：{$vo['dis_money']}</div>
                 <div>{:c_lang($sys_master,'p_td_order_pay_money')}：{$vo['pay_money']}</div>
             </td>
-            <td>{:lang($vo::$fields_is_auth[$vo['is_auth']]).' '.lang($vo::$fields_is_pay[$vo['pay_status']]).' '.lang($vo::$fields_is_send[$vo['is_send']])}</td>
+            <td>{:lang($vo::$fields_is_auth[$vo['is_auth']]).', '.lang($vo::$fields_is_pay[$vo['pay_status']]).', '.lang($vo::$fields_is_send[$vo['is_send']])}</td>
             <td>{:$vo['create_time']}</td>
             <td>
                 <a href="{:url('detail',['id'=>$vo['id']])}">{:lang('g_td_detail')}</a>

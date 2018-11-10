@@ -1,0 +1,268 @@
+{extend name="base"/}
+<!--上级栏目-->
+{block name="slider_bar"}order-index{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_order')}</li>
+<li>{:lang('c_order_detail')}</li>
+{/block}
+{block name="css"}
+<style>
+    .detail-table tbody tr td:nth-child(2n+1){
+        background: #f2f2f2;
+        text-align: right;
+    }
+    .detail-table tbody tr td:nth-child(2n+2){
+        text-align: left;
+    }
+    .goods-info{ width: inherit; margin: 0;}
+    .goods-info img{ width: 120px;height: 120px}
+
+</style>
+{/block}
+
+
+{block name="content"}
+<div class="row">
+    <div class="widget-container-col ui-sortable">
+        <div class="widget-box transparent ui-sortable-handle">
+            <div class="widget-header">
+                <h3 class="widget-title lighter">{:c_lang($sys_master,'p_f_order_base_info')}</h3>
+
+            </div>
+
+            <div class="widget-body">
+                <table class="table  table-bordered detail-table">
+                    <tbody>
+                    <tr>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_no')}</td>
+                        <td width="200">{$order_model['no']}</td>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_user_name')}</td>
+                        <td width="200">{$order_model['uid']}</td>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_create_name')}</td>
+                        <td width="200">{$order_model['create_time']}</td>
+                        <td width="80"></td>
+                        <td width="200"></td>
+                    </tr>
+                    <tr>
+                        <td>{:c_lang($sys_master,'p_f_order_status')}</td>
+                        <td>{$order_model['create_time']}</td>
+                        <td>{:c_lang($sys_master,'p_f_order_pay_way')}</td>
+                        <td>{:lang($order_model::$fields_is_auth[$order_model['is_auth']]).', '.lang($order_model::$fields_is_pay[$order_model['pay_status']]).', '.lang($order_model::$fields_is_send[$order_model['is_send']])}</td>
+                        <td>{:c_lang($sys_master,'p_f_order_pay_time')}</td>
+                        <td>{:$order_model['pay_time']?date('Y-m-d H:i:s',$order_model['pay_time']):''}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>{:c_lang($sys_master,'p_f_order_remark')}</td>
+                        <td>{$order_model['remark']}</td>
+                        <td>{:c_lang($sys_master,'p_f_order_flow_no')}</td>
+                        <td>--</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="widget-container-col ui-sortable">
+        <div class="widget-box transparent ui-sortable-handle">
+            <div class="widget-header">
+                <h3 class="widget-title lighter">{:c_lang($sys_master,'p_f_order_receive_user')}</h3>
+
+            </div>
+
+            <div class="widget-body">
+                <table class="table  table-bordered detail-table">
+                    <tbody>
+                    <tr>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_rec_name')}</td>
+                        <td width="200">{$order_model['rec_name']}</td>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_rec_phone')}</td>
+                        <td width="200">{$order_model['rec_phone']}</td>
+                        <td width="80"></td>
+                        <td width="200"></td>
+                    </tr>
+                    <tr>
+                        <td>{:c_lang($sys_master,'p_f_order_rec_addr')}</td>
+                        <td colspan="3">[{:$order_model['province']} {:$order_model['city']} {:$order_model['area']}] {$order_model['addr']}</td>
+                        <td>{:c_lang($sys_master,'p_f_order_rec_zip_code')}</td>
+                        <td>--</td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-container-col ui-sortable">
+        <div class="widget-box transparent ui-sortable-handle">
+            <div class="widget-header">
+                <h3 class="widget-title lighter">{:c_lang($sys_master,'p_f_order_invoice_info')}</h3>
+
+            </div>
+
+            <div class="widget-body">
+                <table class="table  table-bordered detail-table">
+                    <tbody>
+                    <tr>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_invoice_type')}</td>
+                        <td width="200">xxxx</td>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_invoice_rise')}</td>
+                        <td width="200"></td>
+                        <td width="80"></td>
+                        <td width="200"></td>
+                    </tr>
+                    <tr>
+                        <td>{:c_lang($sys_master,'p_f_order_invoice_no')}</td>
+                        <td></td>
+                        <td>{:c_lang($sys_master,'p_f_order_invoice_mark')}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-container-col ui-sortable">
+        <div class="widget-box transparent ui-sortable-handle">
+            <div class="widget-header">
+                <h3 class="widget-title lighter">{:c_lang($sys_master,'p_f_order_cost')}</h3>
+
+            </div>
+
+            <div class="widget-body">
+                <table class="table  table-bordered detail-table">
+                    <tbody>
+                    <tr>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_total_money')}</td>
+                        <td width="200">{$order_model['total_money']}</td>
+                        <td width="80">{:c_lang($sys_master,'p_f_order_pay_money')}</td>
+                        <td width="200">{$order_model['pay_money']}</td>
+                    </tr>
+                    <tr>
+                        <td>{:c_lang($sys_master,'p_f_order_freight_money')}</td>
+                        <td>{$order_model['freight_money']}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>{:c_lang($sys_master,'p_f_order_dis_money')}</td>
+                        <td>{$order_model['dis_money']}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-container-col ui-sortable">
+        <div class="widget-box transparent ui-sortable-handle">
+            <div class="widget-header">
+                <h3 class="widget-title lighter">{:c_lang($sys_master,'p_f_order_goods_info')}</h3>
+
+            </div>
+
+            <div class="widget-body">
+                <table class="table  table-bordered">
+                    <thead>
+                        <tr>
+                            <td width="400">{:c_lang($sys_master,'p_f_order_goods_name')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_goods_no')}</td>
+                            <td width="200">{:c_lang($sys_master,'p_f_order_goods_sku')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_goods_price')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_goods_num')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_goods_total')}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="order_model['link_goods']" id="vo"}
+                    <tr>
+                        <td>
+                            <div class="row goods-info">
+                                <div class="col-sm-3"><img src="{:get_image_location($vo['g_img'])}"/></div>
+                                <div class="col-sm-9">{:$vo['g_name']}</div>
+                            </div>
+                        </td>
+                        <td>--</td>
+                        <td>{:$vo['g_attr']}</td>
+                        <td>{$vo['g_price']}</td>
+                        <td>{$vo['g_number']}</td>
+                        <td>{$vo['total_price']}</td>
+
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-container-col ui-sortable">
+        <div class="widget-box transparent ui-sortable-handle">
+            <div class="widget-header">
+                <h3 class="widget-title lighter">{:c_lang($sys_master,'p_f_order_flow')}</h3>
+
+            </div>
+
+            <div class="widget-body">
+                <table class="table  table-bordered">
+                    <thead>
+                        <tr>
+                            <td width="400">{:c_lang($sys_master,'p_f_order_opt_name')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_opt_time')}</td>
+                            <td width="200">{:c_lang($sys_master,'p_f_order_opt_state')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_opt_pay_state')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_opt_send_state')}</td>
+                            <td width="120">{:c_lang($sys_master,'p_f_order_flow_mark')}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{/block}
+
+{block name="script"}
+<script>
+
+</script>
+{/block}
