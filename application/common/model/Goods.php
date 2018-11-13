@@ -71,7 +71,7 @@ class Goods extends BaseModel
 //        dump($attr_key);
 //        dump($goods_attr);exit;
         //商品属性信息--spu
-        $goods_attr_spu = empty($input_data['spu']) ? [] : $input_data['spu'];
+        $goods_attr_spu = empty($input_data['spu']) ? [] : array_filter($input_data['spu']);
         foreach ($goods_attr_spu as $key=>$vo) {
             $goods_attr[] = [
                 'aid'   => $key,

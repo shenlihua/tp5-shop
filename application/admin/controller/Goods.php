@@ -180,6 +180,14 @@ class Goods extends Shop
         ]);
     }
 
+    //分类删除
+    public function cateDel()
+    {
+        $id = $this->request->param('id',0,'intval');
+        $model = new \app\common\model\GoodsCate();
+        return $model->actionDel($id);
+    }
+
     //商品模型
     public function model()
     {

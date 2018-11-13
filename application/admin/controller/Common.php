@@ -20,10 +20,10 @@ class Common extends Controller
         //多商户状态
         $this->open_mch_state = (bool)config('open_mch_state');
         //绑定商户信息
-        bind('model\MerchantInfo',
+        bind('app\common\model\Merchant',
             $this->open_mch_state ?
                 (new \app\common\model\Merchant())->where('id',$this->mch_id)->findOrEmpty() :
-                '\app\common\model\Merchant'
+                'app\common\model\Merchant'
         );
         //模块
         $this->view->assign('sys_master',$this->master);

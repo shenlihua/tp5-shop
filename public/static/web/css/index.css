@@ -557,15 +557,16 @@
 .main-content .goods-detail .goods-info .info-item .item .ship{
     display: inline-block;
     float: left;
-    padding-left: 20px;
-    width: 50px;
+    padding-left: 8px;
+    width: 80px;
     margin-right: 10px;
     line-height: 24px;
     color: #8c8c8c;
+    overflow: hidden;
 }
 .main-content .goods-detail .goods-info .info-item .item .content{
     display: inline-block;
-    width: 510px;
+    width: 480px;
 }
 .main-content .goods-detail .goods-info .info-item .item ul{
     overflow: hidden;

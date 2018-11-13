@@ -259,6 +259,13 @@
             })
         })
 
+        //商品sku复选框
+        $(" table thead tr input[type='checkbox']").on('change','#sku-table',function(){
+            var bool =$(this).prop('checked')
+            console.lg()
+            $("#sku-table table tbody tr input[type='checkbox']").prop('checked',bool)
+        })
+
         $("select[name='goods[mid]']").change()
 
     })
