@@ -2,13 +2,16 @@
 
 namespace app\common\model;
 
+use app\common\model\traits\Merchant;
 use think\model\Collection;
 use think\model\concern\SoftDelete;
 use think\Validate;
 
 class Goods extends BaseModel
 {
-    use SoftDelete;
+    use SoftDelete,Merchant;
+
+
 
     protected $name = 's_goods';
 
@@ -467,7 +470,8 @@ class Goods extends BaseModel
 
         if ( $goods_model->count()>0 ) {
             foreach ($goods_model as $key=>$item) {
-                $item['number'] = empty($goods_num[$item['id']])?1:$goods_num[$item['id']]; //购买数量
+                $link_num_key = $item['id'].'_'.$item['link_one_price']['id'];  //商品数量
+                $item['number'] = empty($goods_num[$link_num_key])?1:$goods_num[$link_num_key]; //购买数量
                 $number +=$item['number']; //总数量
                 $item['total_price'] = $item['number']*$item['link_one_price']['price']; //总价格
                 $total_money += $item['total_price'];
@@ -504,4 +508,11 @@ class Goods extends BaseModel
     {
         return $this->hasMany('GoodsAttr','gid');
     }
+
+    //关联购物车
+    public function linkCart()
+    {
+        return $this->hasMany('GoodsCart','gid');
+    }
+
 }

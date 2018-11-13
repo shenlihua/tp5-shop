@@ -851,50 +851,74 @@
     height: inherit;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 }
-
-
 
 .cart-info table tbody tr td.info .img{
-    display: inline-block;
-    width: 150px;
-}
 
+}
 .cart-info table tbody tr td.info .img img{
     width: 110px;
     height: 110px;
 }
-
-.cart-info table tbody tr td.info .name{
-    height: 110px;
-    text-align: left;
+.cart-info table tbody tr td.info div{
+    margin-left: 10px;
     width: 250px;
-    word-break:normal;
-    display:block;
-    white-space:pre-wrap;
-    word-wrap : break-word ;
-    overflow: hidden ;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
     font-size: 14px;
     color: #666;
     font-weight: normal;
     line-height: 20px;
 }
+.cart-info table tbody tr td.info div a{
+    height: 80px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+}
 
-.cart-info table tr:last-child {
+.cart-info table tbody tr td.num .attr-num{
+    font-size:0;
+}
+
+.cart-info table tbody tr td.num .attr-num input[type='button']{
+    font-size: 16px;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #dbdbdb;
+}
+
+.cart-info table tbody tr td.num .attr-num input[type='tel'],
+.cart-info table tbody tr td.num .attr-num input[type='number'],
+.cart-info table tbody tr td.num .attr-num input[type='text']{
+    border: none;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+    width: 40px;
+    padding: 10px;
+    text-align: center;
+}
+
+
+
+.cart-info table tfoot tr{
     height: 60px;
 }
-.cart-info table tr:last-child .cart-info{
+.cart-info table tfoot tr .cart-info{
     font-size: 16px;
     text-align: right;
 }
-.cart-info table tr:last-child .cart-info em{
+.cart-info table tfoot tr .cart-info em{
     color:#cc3341;
 }
-.cart-info table tr:last-child .goods-sure{
+.cart-info table tfoot tr .goods-sure{
     height: inherit;
     text-align: right;
 }
-.cart-info table tr:last-child .goods-sure button{
+.cart-info table tfoot tr .goods-sure button{
     height: inherit;
     width: 160px;
     border: 0;
@@ -902,10 +926,9 @@
     font-size: 20px;
 
 }
-.cart-info table tr:last-child .goods-sure button:hover{
+.cart-info table tfoot tr .goods-sure button:hover{
     background: #cc3341;
     color: #fff;
-
 }
 /*确认订单*/
 .order-info .layui-card {

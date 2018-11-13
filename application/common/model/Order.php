@@ -24,6 +24,7 @@ class Order extends BaseModel
     //订单支付发货
     public static $fields_is_send =['f_order_is_send_no','f_order_is_send_yes'];
 
+
     //设置订单编号
     public function setNoAttr($value)
     {
@@ -64,47 +65,45 @@ class Order extends BaseModel
     }
 
 
-    //创建订单
-    public function actionAdd($input_data, Validate $validate = null)
+    /*
+     * 创建订单
+     * @param $goods_id array 商品id
+     * @param $attr_id array 对应商品属性
+     * @param $number array 购买数量
+     * */
+    public function createOrder(array $goods_id,array $attr_id,array $number)
     {
-        if($validate && !$validate->check($input_data)){
-            abort(40000,$validate->getError());
+        $comb_goods_num = [];
+        foreach ($goods_id as $key=>$vo) {
+            if(!empty($attr_id[$key]) && !empty($number[$key])){
+                $str_key = $vo.'_'.$attr_id[$key];
+                $comb_goods_num[$str_key] = $number[$key];
+            }
         }
-
 
         //获取商品信息
         $goods_model =new Goods();
-        $goods_info = $input_data['goods_info'];
-        if(!is_array($goods_info)) {
-            $goods_info = json_decode($goods_info,true);
+
+        $goods_info = $goods_model->withJoin([
+            'linkOnePrice'=>function($query) use($attr_id){
+            $query->whereIn('linkOnePrice.id',$attr_id);
         }
-
-        $goods_ids = array_column($goods_info,'gid');       //所有商品id
-        $goods_attr_id = array_column($goods_info,'attr_id'); //选择的属性
-        $goods_num = array_column($goods_info, 'num'); //购买数量
-        $comb_goods_num = array_combine($goods_ids,$goods_num); //商品数量信息
-
-        $goods_info = $goods_model->with([
-            'linkOnePrice'=>function($query) use($goods_attr_id){
-            $query->whereIn('id',$goods_attr_id);
-        }
-        ,'linkAttr'])->whereIn('id',$goods_ids)->select();
-
+        ,'linkAttr'],'right')->whereIn('goods.id',$goods_id)->select();
 
         empty($goods_info) && abort(40001,'创建订单异常');
 
 
         //处理订单信息
         list($total_num,$total_money,$pay_money,$dis_money,$freight_money) = $goods_model->handlePayInfo($goods_info,$comb_goods_num);
+
         //订单信息
         $order_data = [
-            'pay_id' => $input_data['pay_id'],
             'total_num' => $total_num,
             'total_money' => $total_money,
             'pay_money' => $pay_money,
             'freight_money' => $freight_money,
             'dis_money' => $dis_money,
-            'remark'    => empty($input_data['remark'])?'':trim($input_data['remark']),
+
         ];
         //商品信息
         $order_goods = [];
@@ -114,7 +113,8 @@ class Order extends BaseModel
                 'gid'       => $vo['id'],
                 'g_name'    => $vo['name'],
                 'g_price'   => $vo['link_one_price']['price'],
-                'g_number'  => empty($comb_goods_num[$vo['id']])?1:$comb_goods_num[$vo['id']],
+                'total_price'   => $vo['total_price'],
+                'g_number'  => $vo['number'],
                 'g_img'     => $vo['cover_img'],
                 'g_attr'    => implode(PHP_EOL,$vo['link_one_price']['attr_info_name']),
                 'info'      => $vo,

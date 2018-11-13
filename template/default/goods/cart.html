@@ -18,59 +18,48 @@
 
         </thead>
         <tbody>
+        {volist name="model" id="vo"}
         <tr>
             <td><input type="checkbox"/></td>
             <td class="info">
-                <a href="##" class="img"><img src="#"/></a>
-                <a href="###" class="name">罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出</a>
+                <a href="##" class="img"><img src="{:get_image_location($vo['link_goods']['cover_img'])}"/></a>
+                <div>
+                    <a href="###" class="name">{$vo['link_goods']['name']}</a>
+                    <span href="###" class="name">【{:implode('】 【',$vo['link_stock']['attr_info_name'])}】</span>
+                </div>
+
             </td>
             <td class="num">
                 <div class="attr-num">
-                    <input class="reduce" value="-" type="button" mtype="dec" data-productid="691">
-                    <input type="text" name="product_691" value="0" mtype="amount" data-max="0" data-productid="691">
-                    <input class="add" value="+" type="button" mtype="inc" data-max="0" data-productid="691">
+                    <input class="reduce" value="-" type="button" onclick="$.common.numberDec($(this).next())">
+                    <input type="tel"  value="{$vo['num']}" data-price="{$vo['link_stock']['price']}" data-cart_id="{$vo['id']}" data-attr_id="{$vo['link_stock']['id']}" data-goods_id="{:$vo['gid']}" >
+                    <input class="add" value="+" type="button" onclick="$.common.numberInc($(this).prev(),10)" data-max="0">
                 </div>
             </td>
             <td class="price">
-                ￥199.99
+                ￥{$vo['link_stock']['price']}
             </td>
             <td class="total">
-                ￥199.99
+                ￥{:$vo['link_stock']['price']*$vo['num']}
             </td>
         </tr>
+        {/volist}
 
-        <tr>
-            <td><input type="checkbox"/></td>
-            <td class="info">
-                <a href="##" class="img"><img src="#"/></a>
-                <a href="###" class="name">罗马仕（ROMOSS） sense6 聚合物移动电源/充电宝 20000mAh 双口输出</a>
-            </td>
-            <td class="num">
-                <div class="attr-num">
-                    <input class="reduce" value="-" type="button" mtype="dec" data-productid="691">
-                    <input type="text" name="product_691" value="0" mtype="amount" data-max="0" data-productid="691">
-                    <input class="add" value="+" type="button" mtype="inc" data-max="0" data-productid="691">
-                </div>
-            </td>
-            <td class="price">
-                ￥199.99
-            </td>
-            <td class="total">
-                ￥199.99
-            </td>
-        </tr>
 
+
+        </tbody>
+        <tfoot>
         <tr>
             <td>
                 <input type="checkbox" id="goods-all"/>
                 <label for="goods-all">全选</label>
             </td>
             <td colspan="3" class="cart-info">
-                <span>已选择<em>3</em>件商品;总计<em><i>￥</i>199.99</em></span>
+                <span>已选择<em>0</em>件商品;总计<em>￥0.00</em></span>
             </td>
-            <td class="goods-sure"><button>结算</button></td>
+            <td class="goods-sure"><button class="redirect-order">结算</button></td>
         </tr>
-        </tbody>
+        </tfoot>
     </table>
 
 </div>
@@ -81,11 +70,65 @@
 {/block}
 {block name="script"}
 <script>
-    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
-    layui.use('element', function(){
-        var element = layui.element;
+    //监听数据变化
+    $.common.numberListeners.push(function(obj,current_obj){
+        var num = $(obj).val();
+        var price = $(obj).data('price');
+        $(obj).parent().parent().parent().find('.total').text('￥'+num*price)
+    })
+    //监听checkbox问题
+    $.common.numberListeners.push(function(obj,current_obj){
+        var bool = $(obj).parent().parent().parent().find("td:eq(0) input[type='checkbox']").prop('checked')
+        if(bool) {
+            //计算商品购物信息
+            $.common.cartGoodsInfo()
+        }
+    })
 
-        //…
-    });
+    //购物车信息
+    $.common.cartGoodsInfo = function(){
+        //重新计算商品销售信息
+        var total_num = 0;
+        var total_price = 0;
+        $(".cart-info table tbody tr").find('td:eq(0) input:checked').parents('tr').find('td:eq(2)').each(function(index){
+            console.log(index)
+            var num = $(this).find('input:eq(1)').val()-0;
+            var price = $(this).find('input:eq(1)').data('price')-0;
+            total_num += num
+            total_price += num*price
+        })
+
+        $("tfoot .cart-info span em:eq(0)").text(total_num);
+        $("tfoot .cart-info span em:eq(1)").text('￥'+total_price);
+
+    }
+
+    $(function(){
+        $("input[type='checkbox']:first,input[type='checkbox']:last").change(function(){
+            var bool = $(this).prop('checked')
+            $("input[type='checkbox']").prop('checked',bool)
+            //计算商品购物信息
+            $.common.cartGoodsInfo()
+        })
+        $(".cart-info table tbody tr td input[type='checkbox']").change(function(){
+            //计算商品购物信息
+            $.common.cartGoodsInfo()
+        })
+        //跳转订单预览界面
+        $(".redirect-order").click(function(){
+            var goods = [];
+            $(".cart-info table tbody tr").find('td:eq(0) input:checked').parents('tr').find('td:eq(2)').each(function(index){
+                var info = [
+                    $(this).find('input:eq(1)').data('goods_id'),
+                    $(this).find('input:eq(1)').data('attr_id'),
+                    $(this).find('input:eq(1)').val(),
+                ];
+
+                goods.push(info.join('_'))
+            })
+            window.location.href = "{:url('order',[],false,false)}/goods/"+goods.join(',');
+        })
+    })
+
 </script>
 {/block}

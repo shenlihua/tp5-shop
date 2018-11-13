@@ -45,12 +45,10 @@
                     <div class="ship">数量</div>
                     <div class="content">
                         <div class="amount-warp">
-                            <input class="text buy-num" ectype="quantity" onblur="changePrice()" value="0" name="number" defaultnumber="1">
+                            <input class="text buy-num" value="1" name="number">
                             <div class="a-btn">
-                                <a href="javascript:void(0);" class="btn-add"><i class="layui-icon layui-icon-up"></i></a>
-                                <a href="javascript:void(0);" class="btn-reduce btn-disabled"><i class="layui-icon layui-icon-down"></i></a>
-                                <input type="hidden" ectype="perNumber" value="1000">
-                                <input type="hidden" ectype="perMinNumber" value="1">
+                                <a href="javascript:void(0)" onclick="$.common.numberInc($(this).parent().prev(),10)" class="btn-add"><i class="layui-icon layui-icon-up"></i></a>
+                                <a href="javascript:void(0);" onclick="$.common.numberDec($(this).parent().prev())"  class="btn-reduce btn-disabled"><i class="layui-icon layui-icon-down"></i></a>
                             </div>
                             <input name="confirm_type" id="confirm_type" type="hidden" value="3">
                         </div>
@@ -59,7 +57,7 @@
             </div>
             <div class="goods-btn">
                 <button type="button" class="buy">立即购买</button>
-                <button type="button" class="cart"><i class="layui-icon layui-icon-cart"></i>加入购物车</button>
+                <button type="button" class="cart" id="add-cart"><i class="layui-icon layui-icon-cart"></i>加入购物车</button>
             </div>
         </div>
 
@@ -119,76 +117,130 @@
 {/block}
 {block name="script"}
 <script>
+
     //属性集合
     var goods_attr = '{:json_encode($goods_info["link_price"],true)}';
     goods_attr = JSON.parse(goods_attr)
-    var attr_k_v={};
-    //选择的属性
-    var attr_id=0;
-    //商品选中的属性
-    var choose_attr_info={};
+
+    var goods_info = {
+        data:[]
+        //商品选择的属性信息
+        ,stock_attr_data:{}
+        //初始化页面元素特效
+        ,first_effect:true
+        //初始化商品数据
+        ,initData:function(data) {
+            // this.data = data;
+
+            this.data = data;
+
+        }
+        //选择商品属性
+        ,chooseAttr:function(index){
+            var group = '';
+            if(index) {
+
+            }else {
+                var attr=[];
+                $(".info-item ul li.active").each(function(index){
+                    attr.push($(this).data('attr_id'))
+                })
+                attr = attr.sort()
+                group = attr.join('|')
+            }
+            if(!!index || group.length>0) {
+                for(var i=0;i<this.data.length;i++) {
+                    if (!!index) {
+                        console.log(123)
+                        if(this.data[i].id==index) {
+                            this.stock_attr_data = this.data[i]
+                            break;
+                        }
+                    } else if(group.length>0) {
+                        console.log(group)
+                        var attr_group = [];
+                        attr_group = this.data[i].attr_info.sort()
+                        attr_group = attr_group.join('|')
+
+                        if(attr_group == group) {
+                            this.stock_attr_data = this.data[i]
+                            break;
+                        }
+                    }
+                }
+            }else {
+                this.stock_attr_data = this.data[0]
+            }
+
+
+            this.showAttr()
+            //初次选择显示属性选中效果
+            if(this.first_effect){
+                this.elementChooseEffect()
+                this.first_effect = false;
+            }
+        }
+        //显示商品信息
+        ,showAttr:function(){
+
+            //处理价格
+            $(".sold-info .info .price").text('￥'+this.stock_attr_data.price)
+        }
+        //改变属性选中效果
+        ,elementChooseEffect:function(){
+            this.stock_attr_data.attr_info.map(function(value,index){
+                $(".info-item ul [data-attr_id='"+value+"']").addClass('active')
+            })
+        }
+    }
+    //初始化数据
+    goods_info.initData(goods_attr);
+    //显示数据
+    goods_info.chooseAttr()
+
+    //
+
+    // var attr_k_v={};
+    // //选择的属性
+    // var attr_id=0;
+    // //商品选中的属性
+    // var choose_attr_info={};
     $(function(){
         $(".info-item ul li a").click(function(){
             if(!$(this).parent().hasClass('active')) {
                 $(this).parent().parent().find('li.active').removeClass('active')
                 $(this).parent().addClass('active')
+                goods_info.chooseAttr()
             }
         })
 
         $(".goods-info .goods-btn .buy").click(function(){
-            var attr=[];
-            $(".info-item ul li.active").each(function(index){
-                attr.push($(this).data('attr_id'))
-            })
-            attr = attr.sort()
-            var group = attr.join('|')
-            // get_attr_id(group)
-            window.location.href="{:url('order',['gid'=>$goods_info['id']],false,false)}/attr_id/"+get_attr_id(group)
+            var obj = {}
+            //购买数量
+            obj['buy_num'] = $(".buy-num").val()
+            //选择的属性
+            obj['attr_id']  = goods_info.stock_attr_data.id
+            var param = '';
+            for(key in obj) {
+                param += key+'/'+obj[key]+'/'
+            }
+
+            window.location.href="{:url('goodsRedirect',['gid'=>$goods_info['id']],false,false)}/"+param
         })
 
+        $("#add-cart").click(function(){
+            var obj = {}
+            //购买数量
+            obj['num'] = $(".buy-num").val()
+            //选择的属性
+            obj['attr_id']  = goods_info.stock_attr_data.id
+
+            $.post("{:url('addCart',['gid'=>$goods_info['id']])}",obj,function(result){
+                alert(result.msg)
+            })
+        })
 
 
     })
-
-    init_data()
-
-    function init_data(index) {
-        var index = index?index:0;
-        var data;
-        for(var i=0;i<goods_attr.length;i++) {
-            if(goods_attr[i].id==index){
-                console.log(goods_attr[i])
-                data = goods_attr[i]
-            }
-            var attr_info = goods_attr[i].attr_info;
-            attr_info = attr_info.sort()
-            attr_info = attr_info.join('|')
-            attr_k_v[attr_info] = goods_attr[i].id
-        }
-
-        if(!data) {
-            data = goods_attr[0];
-        }
-        choose_attr_info = data;
-
-        handle_price()
-    }
-
-    //处理商品价格
-    function handle_price()
-    {
-        //处理价格
-        $(".sold-info .info .price").text('￥'+choose_attr_info.price)
-        choose_attr_info.attr_info.map(function(value,index){
-            $(".info-item ul [data-attr_id='"+value+"']").addClass('active')
-        })
-    }
-
-
-    //获取选择的属性
-    function get_attr_id(group)
-    {
-        return attr_k_v[group]
-    }
 </script>
 {/block}

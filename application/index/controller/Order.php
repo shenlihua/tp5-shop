@@ -10,10 +10,30 @@ class Order extends Common
         $input_data = $this->request->post();
         $validate = new \app\common\validate\OrderCreate();
         $order_model = new \app\common\model\Order();
-//        dump($input_data);exit;
-        try{
 
-            $order_model->actionAdd($input_data,$validate);
+        try{
+            if($validate && !$validate->check($input_data)){
+                abort(40000,$validate->getError());
+            }
+
+
+
+            $goods_info = $input_data['goods_info'];
+            if(!is_array($goods_info)) {
+                $goods_info = json_decode($goods_info,true);
+            }
+
+            $goods_ids = array_column($goods_info,'gid');       //所有商品id
+            $goods_attr_id = array_column($goods_info,'attr_id'); //选择的属性
+            $goods_num = array_column($goods_info, 'num'); //购买数量
+
+            //处理商品信息--绑定数据
+            $order_model->data([
+                'pay_id' => $input_data['pay_id'],
+                'remark'    => empty($input_data['remark'])?'':trim($input_data['remark']),
+            ]);
+            $order_model->createOrder($goods_ids,$goods_attr_id,$goods_num);
+
         }catch (\Exception $e) {
             $this->error($e->getMessage());
         }
