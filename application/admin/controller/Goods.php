@@ -6,7 +6,7 @@ class Goods extends Shop
     //商品列表
     public function index()
     {
-        $list = model('Goods')->useSoftDelete(false)->with(['linkAttr','linkPrice'])->paginate()->each(function($item, $key){
+        $list = model('Goods')->with(['linkAttr','linkPrice'])->paginate()->each(function($item, $key){
 //            $attr = array_column($item['link_attr'],null,$);
             $attr = [];
             foreach($item['link_attr'] as $vo) {

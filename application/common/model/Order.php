@@ -3,13 +3,14 @@
 namespace app\common\model;
 
 use app\common\model\traits\Pay;
+use app\common\model\traits\TMch;
 use think\model\concern\SoftDelete;
 use think\Validate;
 
 class Order extends BaseModel
 {
 
-    use SoftDelete,Pay;
+    use SoftDelete,Pay,TMch;
 
     protected $name = 's_order';
     //新增入库操作

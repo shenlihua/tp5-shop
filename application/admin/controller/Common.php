@@ -8,15 +8,24 @@ use think\Validate;
 class Common extends Controller
 {
     const VALIDATE_SCENE = 'admin_add';
+
+    //是否开启多商户状态
+    protected $open_mch_state;
+    protected $mch_id = 1;//商户信息
+
     protected $master;
-
-
 
     protected function initialize()
     {
-        //绑定操作栏目
-//        $this->view->config('view_path',$this->app->getModulePath() . 'view' . DIRECTORY_SEPARATOR.$this->master.DIRECTORY_SEPARATOR);
-
+        //多商户状态
+        $this->open_mch_state = (bool)config('open_mch_state');
+        //绑定商户信息
+        bind('model\MerchantInfo',
+            $this->open_mch_state ?
+                (new \app\common\model\Merchant())->where('id',$this->mch_id)->findOrEmpty() :
+                '\app\common\model\Merchant'
+        );
+        //模块
         $this->view->assign('sys_master',$this->master);
 
     }

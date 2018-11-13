@@ -1,11 +1,12 @@
 <?php
 namespace app\common\model;
 
+use app\common\model\traits\TMch;
 use think\model\concern\SoftDelete;
 
 class GoodsCate extends BaseModel
 {
-    use SoftDelete;
+    use SoftDelete,TMch;
 
     protected $name = 's_goods_cate';
 

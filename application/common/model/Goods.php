@@ -2,14 +2,14 @@
 
 namespace app\common\model;
 
-use app\common\model\traits\Merchant;
+use app\common\model\traits\TMch;
 use think\model\Collection;
 use think\model\concern\SoftDelete;
 use think\Validate;
 
 class Goods extends BaseModel
 {
-    use SoftDelete,Merchant;
+    use SoftDelete,TMch;
 
 
 
