@@ -18,31 +18,37 @@
 
         </thead>
         <tbody>
-        {volist name="model" id="vo"}
-        <tr>
+        {volist name="cart_list" id="cl"}
+        <tr class="merchant-info">
             <td><input type="checkbox"/></td>
-            <td class="info">
-                <a href="##" class="img"><img src="{:get_image_location($vo['link_goods']['cover_img'])}"/></a>
-                <div>
-                    <a href="###" class="name">{$vo['link_goods']['name']}</a>
-                    <span href="###" class="name">【{:implode('】 【',$vo['link_stock']['attr_info_name'])}】</span>
-                </div>
-
-            </td>
-            <td class="num">
-                <div class="attr-num">
-                    <input class="reduce" value="-" type="button" onclick="$.common.numberDec($(this).next())">
-                    <input type="tel"  value="{$vo['num']}" data-price="{$vo['link_stock']['price']}" data-cart_id="{$vo['id']}" data-attr_id="{$vo['link_stock']['id']}" data-goods_id="{:$vo['gid']}" >
-                    <input class="add" value="+" type="button" onclick="$.common.numberInc($(this).prev(),10)" data-max="0">
-                </div>
-            </td>
-            <td class="price">
-                ￥{$vo['link_stock']['price']}
-            </td>
-            <td class="total">
-                ￥{:$vo['link_stock']['price']*$vo['num']}
-            </td>
+            <td class="mch-info" colspan="4"><h3>{$cl['merchant_info']['name']}</h3></td>
         </tr>
+            {volist name="cl['list']" id="vo"}
+            <tr class="goods-info">
+                <td><input type="checkbox"/></td>
+                <td class="info">
+                    <a href="##" class="img"><img src="{:get_image_location($vo['cover_img'])}"/></a>
+                    <div>
+                        <a href="###" class="name">{$vo['name']}</a>
+                        <span href="###" class="name">【{:implode('】 【',$vo['link_one_price']['attr_info_name'])}】</span>
+                    </div>
+
+                </td>
+                <td class="num">
+                    <div class="attr-num">
+                        <input class="reduce" value="-" type="button" onclick="$.common.numberDec($(this).next())">
+                        <input type="tel"  value="{$vo['link_goods_cart']['num']}" data-price="{$vo['link_one_price']['price']}" data-cart_id="{$vo['link_goods_cart']['id']}" data-attr_id="{$vo['link_one_price']['id']}" data-goods_id="{:$vo['id']}" >
+                        <input class="add" value="+" type="button" onclick="$.common.numberInc($(this).prev(),10)" data-max="0">
+                    </div>
+                </td>
+                <td class="price">
+                    ￥{$vo['link_one_price']['price']}
+                </td>
+                <td class="total">
+                    ￥{:$vo['link_one_price']['price']*$vo['link_goods_cart']['num']}
+                </td>
+            </tr>
+            {/volist}
         {/volist}
 
 
@@ -110,14 +116,29 @@
             //计算商品购物信息
             $.common.cartGoodsInfo()
         })
-        $(".cart-info table tbody tr td input[type='checkbox']").change(function(){
+        //按商户选中
+        $(".cart-info table tbody tr.merchant-info td input[type='checkbox']").change(function(){
+            var bool = $(this).prop('checked')
+            var current_index = $(this).parents('tr').index()
+            var current_class = $(this).parents('tr').attr('class')
+            $('.cart-info table tbody tr:gt('+current_index+')').each(function(index){
+                var item_class = $(this).attr('class')
+                if(item_class == current_class) {
+                    return false;
+                }
+                $(this).find("td input[type='checkbox']").prop('checked',bool)
+            })
+            //计算商品购物信息
+            $.common.cartGoodsInfo()
+        })
+        $(".cart-info table tbody tr.goods-info td input[type='checkbox']").change(function(){
             //计算商品购物信息
             $.common.cartGoodsInfo()
         })
         //跳转订单预览界面
         $(".redirect-order").click(function(){
             var goods = [];
-            $(".cart-info table tbody tr").find('td:eq(0) input:checked').parents('tr').find('td:eq(2)').each(function(index){
+            $(".cart-info table tbody tr.goods-info").find('td:eq(0) input:checked').parents('tr').find('td:eq(2)').each(function(index){
                 var info = [
                     $(this).find('input:eq(1)').data('goods_id'),
                     $(this).find('input:eq(1)').data('attr_id'),

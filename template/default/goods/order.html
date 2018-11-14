@@ -82,34 +82,38 @@
         </div>
     </div>
     <div class="layui-card">
-        <div class="layui-card-header card-header">商品信息</div>
+        {foreach  $goods_list as $k=>$gl}
+        <input type="hidden" name="goods_info[{$k}][mch_id]" value="{$gl['merchant_info']['id']}"/>
+        <div class="layui-card-header card-header">店铺: {$gl['merchant_info']['name']}</div>
         <div class="layui-card-body goods-item">
             <div class="goods-info">
 
-                {volist name="goods_list" id="vo"}
-                    <div class="goods">
+                    {volist name="gl['list']" id="vo" key="goods_key"}
+                        <div class="goods">
 
-                        <a href="##">
-                            <img src="{:get_image_location($vo['cover_img'])}" alt=""/>
-                            <span class="name">
-                                {$vo['name']}
-                            </span>
-                        </a>
-                        <div class="attr">
-                            <span class="prop">{:implode("|",$vo['link_one_price']['attr_info_name'])}</span>
-                            <span class="price">￥{$vo['link_one_price']['price']}</span>
-                            <span class="num">{$vo['number']}</span>
-                            <span class="total">￥{$vo['total_price']}</span>
+                            <a href="##">
+                                <img src="{:get_image_location($vo['cover_img'])}" alt=""/>
+                                <span class="name">
+                                    {$vo['name']}
+                                </span>
+                            </a>
+                            <div class="attr">
+                                <span class="prop">{:implode("|",$vo['link_one_price']['attr_info_name'])}</span>
+                                <span class="price">￥{$vo['link_one_price']['price']}</span>
+                                <span class="num">{$vo['number']}</span>
+                                <span class="total">￥{$vo['total_price']}</span>
 
+                            </div>
                         </div>
-                    </div>
-                <input type="hidden" name="goods_info[{$key}][gid]" value="{$vo['id']}"/>
-                <input type="hidden" name="goods_info[{$key}][attr_id]" value="{$vo['link_one_price']['id']}"/>
-                <input type="hidden" name="goods_info[{$key}][num]" value="{$vo['number']}"/>
-                {/volist}
+                    <input type="hidden" name="goods_info[{$k}][sku_info][{$goods_key}][gid]" value="{$vo['id']}"/>
+                    <input type="hidden" name="goods_info[{$k}][sku_info][{$goods_key}][attr_id]" value="{$vo['link_one_price']['id']}"/>
+                    <input type="hidden" name="goods_info[{$k}][sku_info][{$goods_key}][num]" value="{$vo['number']}"/>
+                    {/volist}
 
             </div>
         </div>
+        {/foreach}
+
     </div>
     <div class="layui-card">
         <div class="layui-card-header card-header">发票信息</div>

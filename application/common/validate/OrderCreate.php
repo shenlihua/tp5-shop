@@ -32,13 +32,19 @@ class OrderCreate extends Validate
         }
 
         foreach ($value as $vo) {
-            if(empty($vo['gid'])) {
-                return '商品信息异常:gid';
-            }elseif(empty($vo['attr_id'])){
-                return '商品信息异常:attr_id';
-            }elseif(empty($vo['num'])){
-                return '商品信息异常:num';
+            if(!isset($vo['mch_id'])){
+                return '商户信息异常:mch_id';
             }
+            foreach ($vo['sku_info'] as $sku){
+                if(empty($sku['gid'])) {
+                    return '商品信息异常:gid';
+                }elseif(empty($sku['attr_id'])){
+                    return '商品信息异常:attr_id';
+                }elseif(empty($sku['num'])){
+                    return '商品信息异常:num';
+                }
+            }
+
         }
 
 

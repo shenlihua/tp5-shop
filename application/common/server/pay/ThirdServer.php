@@ -58,14 +58,13 @@ class ThirdServer
      * */
     public function payInfo(Model $opt_obj,$pay_mode)
     {
-
         //获取第三方模式
         $third_id = $opt_obj->getPayId();
         //创建服务对象
         $this->_createServer($third_id);
         //设置回调通知地址
         $obj_class_name = class_basename($opt_obj);
-        $notify_url = url('Index/Order/notify',['order_id'=>$opt_obj->primaryKeyValue(),'model'=>$obj_class_name],false,true);
+        $notify_url = url('Index/Order/notify',['order_id'=>$opt_obj->getPrimaryKeyValue(),'model'=>$obj_class_name],false,true);
 //        dump($notify_url);exit;
         //设置通知地址
         $this->third_server->setNotifyUrl($notify_url);

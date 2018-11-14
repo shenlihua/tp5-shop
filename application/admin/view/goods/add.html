@@ -259,13 +259,38 @@
             })
         })
 
-        //商品sku复选框
-        $(" table thead tr input[type='checkbox']").on('change','#sku-table',function(){
+        //商品sku复选框-全选/取消
+        $("#sku-table").on('change'," table thead tr input[type='checkbox']",function(){
             var bool =$(this).prop('checked')
-            console.lg()
             $("#sku-table table tbody tr input[type='checkbox']").prop('checked',bool)
         })
 
+        //sku复选框--隐藏效果
+        $("#sku-table").on('change'," table tbody tr input[type='checkbox']",function(){
+            var bool =$(this).prop('checked')
+            if(!bool) {
+                $(this).parents('tr').hide()
+            }
+        })
+
+        //快速填充价格
+        $("#sku-table").on('keyup'," table tfoot tr input:eq(0)",function(){
+            var value = $(this).val()
+            $("#sku-table table tbody tr").find("input[type='number']:eq(0)").each(function(index){
+                $(this).val(value)
+            })
+        })
+
+        //快速填充库存
+        $("#sku-table").on('keyup'," table tfoot tr input:eq(1)",function(){
+            var value = $(this).val()
+            $("#sku-table table tbody tr").find("input[type='number']:eq(1)").each(function(index){
+                $(this).val(value)
+            })
+        })
+
+
+        //主动调用属性
         $("select[name='goods[mid]']").change()
 
     })
@@ -394,7 +419,15 @@
             '<td width="7%">{:c_lang($sys_master,"p_td_goods_bar_code")}</td>' +
             '<td width="7%">{:c_lang($sys_master,"p_td_goods_price")}</td>' +
             '<td width="7%">{:c_lang($sys_master,"p_td_goods_stock")}</td>' +
-            '</tr></thead>\n' + tbody_html + '</table>'
+            '</tr></thead>\n<tbody>' + tbody_html
+
+        html += '</tbody><tfoot><tr>' +
+            '<td colspan="6"></td>' +
+            '<td><input type="number"  class="width-60"/></td>' +
+            '<td><input type="number"  class="width-60"/></td>' +
+            '</tr></tfoot>' +
+            '</table>'
+
         // console.log(html)
         $("#sku-table").html(html)
     }

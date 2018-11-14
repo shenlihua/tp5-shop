@@ -55,28 +55,12 @@ class Goods extends Common
     public function cart()
     {
         //sku属性id
-        $attr_ids = [];
         $model = model('GoodsCart');
-        $model = $model
-            ->withJoin(['linkGoods','linkStock'],'left')
-            ->where('uid','=',$this->user_id)
-            ->select()->each(function($value,$index) use(&$attr_ids){
-                $attr_ids = array_merge($attr_ids,$value['link_stock']['attr_info']);
-            });
-        $attr_ids = array_unique($attr_ids);
-        //查询属性信息
-        $attr = model('GoodsAttr')->whereIn('id',$attr_ids)->column('val','id');
-        $model->each(function($value,$index)use($attr){
-            $attr_info_name = [];
-            foreach ($value['link_stock']['attr_info'] as $ai) {
-                $attr_info_name[] = isset($attr[$ai]) ? $attr[$ai]: '';
-            }
-            $value['link_stock']['attr_info_name'] = $attr_info_name;
-        });
-//        dump($model);
+
+        $cart_list = $model->cartInfo();
 
         return view('cart',[
-            'model' => $model
+            'cart_list' => $cart_list
         ]);
     }
 
@@ -91,32 +75,13 @@ class Goods extends Common
 
         empty($goods_id) && abort(200,'商品信息异常');
         empty($attr_id) && abort(200,'商品sku信息异常');
-
+        //查询
 
 
         $model = model('GoodsCart');
-        $where =  [
-            ['gid','=',$goods_id],
-            ['uid','=',$this->user_id],
-            ['attr_id','=',$attr_id],
+        list($state,$msg) = $model->addCart($goods_id,$attr_id,$goods_num);
 
-        ];
-
-        $cart_info = $model->where($where)->find();
-        if($cart_info) {
-            $model->where($where)->setInc('num',$goods_num);
-        }else{
-
-            $save =  [
-                'gid'=>$goods_id,
-                'uid'=>$this->user_id,
-                'attr_id'=>$attr_id,
-                'num'=>$goods_num,
-            ];
-            $model->save($save);
-        }
-
-        return ['code'=>0,'msg'=>'添加成功'];
+        return ['code'=>(int)$state,'msg'=>!$state?$msg:'添加成功'];
 
     }
 
@@ -170,16 +135,24 @@ class Goods extends Common
 //        dump($number);
 //        dump($goods_num);
 
-        $goods = $goods_model->withJoin(['linkOnePrice'=>function($query)use($attr_id){
-            $query->whereIn('linkOnePrice.id', $attr_id);
-        }])->whereIn('Goods.id',$gid)->select();
-
-        //获取商品数据
+        $goods = $goods_model->withJoin([
+            //关联库存信息
+            'linkOnePrice'=>function($query)use($attr_id){
+                $query->whereIn('linkOnePrice.id', $attr_id);
+            },
+            'linkMerchant'
+        ],'left')->whereIn('Goods.id',$gid)->select();
+//        print_r($goods);exit;
+        //获取商品数据--支付
         list($number,$total_money,$pay_money,$dis_money,$freight_money) = $goods_model->handlePayInfo($goods,$goods_num);
-
-//        dump($goods);
-//        exit;
-
+        //拼接商品属性等信息
+        $goods_model->handleFullGoodsInfo($goods);
+        //按店铺拆分商品信息
+        $goods = $goods_model->handleMerchantGoodsInfo($goods);
+//        foreach ($goods as $key=>$vo){
+//            dump($key);
+//        }
+//        dump($goods);exit;
         return view('order',[
             'number' => $number,
             'total_money' => $total_money,

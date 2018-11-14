@@ -9,5 +9,9 @@ class Common extends Controller
 
     public function initialize()
     {
+        //绑定用户信息
+        bind('container_user_id',function(){
+            return $this->user_id;
+        });
     }
 }

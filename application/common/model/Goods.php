@@ -476,7 +476,6 @@ class Goods extends BaseModel
                 $item['total_price'] = $item['number']*$item['link_one_price']['price']; //总价格
                 $total_money += $item['total_price'];
 
-                $item->handleOrderData();
             }
         }
 
@@ -490,6 +489,49 @@ class Goods extends BaseModel
             $freight_money
         );
     }
+
+    /*
+     * 商品信息--完整信息
+     * */
+    public function handleFullGoodsInfo(\think\Collection $goods_model)
+    {
+        $attr_ids = [];
+        $goods_model->each(function($value,$index) use(&$attr_ids){
+            $attr_ids = array_merge($attr_ids,$value['link_one_price']['attr_info']);
+        });
+        $attr_ids = array_unique($attr_ids);
+        //查询属性信息
+        $attr = model('GoodsAttr')->whereIn('id',$attr_ids)->column('val','id');
+
+        $goods_model->each(function($value,$index)use($attr){
+            $attr_info_name = [];
+            foreach ($value['link_one_price']['attr_info'] as $ai) {
+                $attr_info_name[] = isset($attr[$ai]) ? $attr[$ai]: '';
+            }
+            $value['link_one_price']['attr_info_name'] = $attr_info_name;
+        });
+    }
+
+    /*
+     * 按商家划分数据
+     * */
+    public function handleMerchantGoodsInfo(\think\Collection $goods)
+    {
+        $list = [];
+        foreach($goods as $vo) {
+            $merchant_info = $vo['link_merchant'];  //商户信息
+            $primary_id = empty($merchant_info['id'])?0:$merchant_info['id'];     //商户id
+            if(array_key_exists($primary_id,$list)){
+                $list[$primary_id]['list'][] = $vo;
+            }else{
+                $list[$primary_id]['merchant_info'] = $merchant_info;
+                $list[$primary_id]['list'][] = $vo;
+            }
+
+        }
+        return array_values($list);
+    }
+
 
 
     //关联商品价格属性--一个属性
@@ -513,6 +555,18 @@ class Goods extends BaseModel
     public function linkCart()
     {
         return $this->hasMany('GoodsCart','gid');
+    }
+
+    //关联商户
+    public function linkMerchant()
+    {
+        return $this->belongsTo('Merchant','mch_id');
+    }
+
+    //关联商户
+    public function linkGoodsCart()
+    {
+        return $this->hasOne('GoodsCart','gid');
     }
 
 }

@@ -841,28 +841,42 @@
 }
 
 
-.cart-info table thead tr{
+
+.cart-info table thead tr.goods-info{
     height: 60px;
 }
 
-.cart-info table tbody tr{
+.cart-info table tbody tr.merchant-info{
+    height: 45px;
+    border-bottom: 1px solid #fff;
+}
+.cart-info table tbody tr.merchant-info .mch-info{
+    text-align: left;
+
+}
+.cart-info table tbody tr.merchant-info .mch-info h3{
+    font-size: 13px;
+    font-weight: bold;
+    color: #222;
+}
+.cart-info table tbody tr.goods-info{
     height: 135px;
 }
-.cart-info table tbody tr td.info{
+.cart-info table tbody tr.goods-info td.info{
     height: inherit;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.cart-info table tbody tr td.info .img{
+.cart-info table tbody tr.goods-info td.info .img{
 
 }
-.cart-info table tbody tr td.info .img img{
+.cart-info table tbody tr.goods-info td.info .img img{
     width: 110px;
     height: 110px;
 }
-.cart-info table tbody tr td.info div{
+.cart-info table tbody tr.goods-info td.info div{
     margin-left: 10px;
     width: 250px;
     display: flex;
@@ -873,7 +887,7 @@
     font-weight: normal;
     line-height: 20px;
 }
-.cart-info table tbody tr td.info div a{
+.cart-info table tbody tr.goods-info td.info div a{
     height: 80px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -881,20 +895,20 @@
     overflow: hidden;
 }
 
-.cart-info table tbody tr td.num .attr-num{
+.cart-info table tbody tr.goods-info td.num .attr-num{
     font-size:0;
 }
 
-.cart-info table tbody tr td.num .attr-num input[type='button']{
+.cart-info table tbody tr.goods-info td.num .attr-num input[type='button']{
     font-size: 16px;
     padding: 8px;
     background: #fff;
     border: 1px solid #dbdbdb;
 }
 
-.cart-info table tbody tr td.num .attr-num input[type='tel'],
-.cart-info table tbody tr td.num .attr-num input[type='number'],
-.cart-info table tbody tr td.num .attr-num input[type='text']{
+.cart-info table tbody tr.goods-info td.num .attr-num input[type='tel'],
+.cart-info table tbody tr.goods-info td.num .attr-num input[type='number'],
+.cart-info table tbody tr.goods-info td.num .attr-num input[type='text']{
     border: none;
     border-top: 1px solid #dbdbdb;
     border-bottom: 1px solid #dbdbdb;
