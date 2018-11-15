@@ -177,6 +177,7 @@ class Order extends BaseModel
         $goods_model->handleFullGoodsInfo($goods_info);
         //订单信息
         $order_data = [
+            'mch_id'       => $mch_id,
             'total_num' => $total_num,
             'total_money' => $total_money,
             'pay_money' => $pay_money,
@@ -191,6 +192,7 @@ class Order extends BaseModel
             $order_goods[] = [
                 'mch_id'       => $mch_id,
                 'gid'       => $vo['id'],
+                'attr_id'       => $vo['link_one_price']['id'],
                 'g_name'    => $vo['name'],
                 'g_price'   => $vo['link_one_price']['price'],
                 'total_price'   => $vo['total_price'],
