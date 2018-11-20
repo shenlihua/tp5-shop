@@ -139,6 +139,7 @@ return [
     //面包屑
     'c_config'          =>  '系统设置',
     'c_config_shop'     =>  '商城设置',
+    'c_third_config'    =>  '第三方设置',
     /*platform start*/
     /*文章管理开始*/
     'c_article'             =>  '文章管理',
@@ -147,6 +148,8 @@ return [
     'c_article_cate_opt'    =>  '文章分类操作',
 
     /*文章管理结束*/
+
+
     /*platform end*/
 
     /*shop start*/
@@ -324,6 +327,9 @@ return [
         'n_n_location'      => '地区&配送',
         'n_n_mail'          => '邮件服务器设置',
         'n_n_api'           => '接口对接',
+            'config_wechat'         =>  '微信配置',
+            'config_alipay'         =>  '支付宝配置',
+
         'n_n_verify'        => '验证码设置',
         'n_n_u_retrieval'=> '用户检索',
 

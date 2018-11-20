@@ -1,0 +1,70 @@
+{extend name="base"/}
+
+<!--上级栏目-->
+{block name="slider_bar"}thirdconfig-index{/block}
+<!--面包屑-->
+{block name="breadcrumb"}
+<i class="ace-icon fa fa-home fa-users"></i>
+<li>{:lang('c_config')}</li>
+<li>{:lang('c_third_config')}</li>
+{/block}
+{block name="content"}
+<div class="col-xs-12">
+    <!-- PAGE CONTENT BEGINS -->
+    <div class="tabbable">
+        <ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+            {volist name="data" id="vo"}
+            <li class="{:$key?'':'active'}">
+                <a data-toggle="tab" href="#{$vo['lang_name']}">
+                    {:c_lang($sys_master,$vo['lang_name'])}
+                </a>
+            </li>
+            {/volist}
+
+        </ul>
+
+        <div class="tab-content no-border padding-24">
+            {volist name="data" id="vo"}
+            <div id="{$vo['lang_name']}" class="tab-pane fade {:$key?'':' in active'}">
+                <form class="form-horizontal" action="{:url('configAction')}">
+                <h4 class="blue">
+                    <a class="btn btn-white btn-info btn-bold submit">{:c_lang('g_save')}</a>
+                </h4>
+                {volist name="vo['fields']" id="ch"}
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right"> {$ch['name']} </label>
+                    <div class="col-sm-9">
+
+                        {if ($ch['ipt_type']=='text') }
+                        <input type="text" placeholder="{$ch['name']}" name="{$vo['type']}[{$ch['name']}]" value="{$ch['value']}" class="form-control">
+                        {/if}
+
+                        {if (c_lang_check($sys_master,$ch['name'].'_notice'))}
+                        <span class="help-block">{:c_lang($sys_master,$ch['name'].'_notice')}</span>
+                        {/if}
+
+                    </div>
+                </div>
+                {/volist}
+                </form>
+            </div>
+            {/volist}
+        </div>
+    </div>
+
+    <!-- PAGE CONTENT ENDS -->
+</div><!-- /.col -->
+{/block}
+
+{block name="script"}
+<script>
+    $(function(){
+        $(".submit").click(function(){
+            var $this = $(this);
+            $.post($this.parents('form').attr('action'),$this.parents('form').serialize(),function(result){
+                layer.msg(result.msg)
+            })
+        })
+    })
+</script>
+{/block}
